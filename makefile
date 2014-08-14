@@ -100,6 +100,8 @@ test-tutorial-tsbounds: build
 	pshell examples/Advanced/TouchSourceBounds
 
 # prototypes
+test-android: build
+	pshell -a tests/android
 test-ripple: build
 	pshell tests/ripple
 test-viewport: build
