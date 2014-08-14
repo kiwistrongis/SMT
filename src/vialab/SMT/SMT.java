@@ -205,128 +205,132 @@ public class SMT {
 	 */
 	public static void init(
 			PApplet applet, int port, TouchSource... sources){
-		if( applet == null)
-			throw new NullPointerException(
-				"Null applet parameter, pass 'this' to SMT.init() instead of null");
+		try{
+			if( applet == null)
+				throw new NullPointerException(
+					"Null applet parameter, pass 'this' to SMT.init() instead of null");
 
-		//check processing version
-		if( ! pversion_override)
-			if( ! checkProcessingVersion())
-				return;
+			//check processing version
+			if( ! pversion_override)
+				if( ! checkProcessingVersion())
+					return;
 
-		//check renderer
-		if( ! P3DDSRenderer.class.isInstance( applet.g))
-			throw new RuntimeException(
-				String.format(
-					"To use this library you must use SMT.RENDERER as the renderer field in size(). For example: size( 800, 600, SMT.RENDERER). You used %s.",
-					applet.g.getClass().getName()));
-		renderer = (P3DDSRenderer) applet.g;
+			//check renderer
+			if( ! P3DDSRenderer.class.isInstance( applet.g))
+				throw new RuntimeException(
+					String.format(
+						"To use this library you must use SMT.RENDERER as the renderer field in size(). For example: size( 800, 600, SMT.RENDERER). You used %s.",
+						applet.g.getClass().getName()));
+			renderer = (P3DDSRenderer) applet.g;
 
-		//load applet methods
-		SMT.applet = applet;
-		SMTUtilities.loadMethods( applet.getClass());
+			//load applet methods
+			SMT.applet = applet;
+			SMTUtilities.loadMethods( applet.getClass());
 
-		//load system adapter
+			//load system adapter
 
-		//load default touch bounds
-		SMT.setTouchSourceBoundsSketch( TouchSource.MOUSE,	
-			TouchSource.LEAP, TouchSource.SMART,
-			TouchSource.TUIO_DEVICE, TouchSource.WM_TOUCH);
+			//load default touch bounds
+			SMT.setTouchSourceBoundsSketch( TouchSource.MOUSE,	
+				TouchSource.LEAP, TouchSource.SMART,
+				TouchSource.TUIO_DEVICE, TouchSource.WM_TOUCH);
 
-		//load touch drawer ( if necessary )
-		if( touchDrawMethod == TouchDraw.TEXTURED)
-			texturedTouchDrawerNullCheck();
+			//load touch drawer ( if necessary )
+			if( touchDrawMethod == TouchDraw.TEXTURED)
+				texturedTouchDrawerNullCheck();
 
-		touch = SMTUtilities.getPMethod( applet, "touch");
-		SMT.sketch = new MainZone( 0, 0, applet.width, applet.height);
+			touch = SMTUtilities.getPMethod( applet, "touch");
+			SMT.sketch = new MainZone( 0, 0, applet.width, applet.height);
 
-		//register extra methods
-		applet.registerMethod("draw", new SMT());
-		applet.registerMethod("pre", new SMT());
+			//register extra methods
+			applet.registerMethod("draw", new SMT());
+			applet.registerMethod("pre", new SMT());
 
-		picker = new ZonePicker();
-		listener = new SMTTuioListener();
-		manager = new SMTTouchManager( listener, picker);
-		mainListenerPort = port;
+			picker = new ZonePicker();
+			listener = new SMTTuioListener();
+			manager = new SMTTouchManager( listener, picker);
+			mainListenerPort = port;
 
-		//remove duplicate touch sources and stuff
-		boolean auto_enabled = false;
-		boolean tuio_enabled = false;
-		Vector<TouchSource> filteredSources = new Vector<TouchSource>();
-		for( TouchSource source : sources)
-			if( source == TouchSource.AUTOMATIC ||
-					source == TouchSource.MULTIPLE)
-				auto_enabled = true;
-			else if( source == TouchSource.TUIO_DEVICE)
-				tuio_enabled = true;
-			else if( ! filteredSources.contains( source))
-				filteredSources.add( source);
+			//remove duplicate touch sources and stuff
+			boolean auto_enabled = false;
+			boolean tuio_enabled = false;
+			Vector<TouchSource> filteredSources = new Vector<TouchSource>();
+			for( TouchSource source : sources)
+				if( source == TouchSource.AUTOMATIC ||
+						source == TouchSource.MULTIPLE)
+					auto_enabled = true;
+				else if( source == TouchSource.TUIO_DEVICE)
+					tuio_enabled = true;
+				else if( ! filteredSources.contains( source))
+					filteredSources.add( source);
 
-		//the tuio adapter should always started first
-		// so it uses the parameter-specified port.
-		if( tuio_enabled || auto_enabled){
-			try{ connect_tuio( port);}
-			catch( TuioConnectionException exception){
-				System.out.printf(
-					"Opening a tuio listener on port %d failed. Tuio devices probably won't work.\n", port);
-			}
-			//increment port regardless of success so tuio devices don't get mistaken for other sources
-			// if this connection failed, the port is probably going to be incremented anyways when opening a new listener.
-			port++;
-		}
-		//connect to every specified touch source
-		for( TouchSource source : filteredSources){
-			//open a new listener
-			TuioClient client = null;
-			while( client == null)
-				try{ client = openTuioClient( port);}
+			//the tuio adapter should always started first
+			// so it uses the parameter-specified port.
+			if( tuio_enabled || auto_enabled){
+				try{ connect_tuio( port);}
 				catch( TuioConnectionException exception){
-					port++;
+					System.out.printf(
+						"Opening a tuio listener on port %d failed. Tuio devices probably won't work.\n", port);
 				}
-
-			switch (source){
-				case ANDROID:
-					//connect_auto will take care of this later - ignore
-					if( ! auto_enabled)
-						connect_android( port);
-					break;
-				case MOUSE:
-					//connect_auto will take care of this later - ignore
-					if( ! auto_enabled)
-						connect_mouse( port);
-					break;
-				case LEAP:
-					//connect_auto will take care of this later - ignore
-					if( ! auto_enabled)
-						connect_leap( port);
-					break;
-				case SMART:
-					connect_smart( port);
-					break;
-				case WM_TOUCH:
-					//connect_auto will take care of this later - ignore
-					if( ! auto_enabled)
-						connect_windows( port);
-					break;
-				default: break;
+				//increment port regardless of success so tuio devices don't get mistaken for other sources
+				// if this connection failed, the port is probably going to be incremented anyways when opening a new listener.
+				port++;
 			}
-			//increment the port so next source's client doesn't conflict
-			port++;
-		}
-		if( auto_enabled) connect_auto( port);
+			//connect to every specified touch source
+			for( TouchSource source : filteredSources){
+				//open a new listener
+				TuioClient client = null;
+				while( client == null)
+					try{ client = openTuioClient( port);}
+					catch( TuioConnectionException exception){
+						port++;
+					}
 
-		//there's got to be a better way
-		addJVMShutdownHook();
+				switch (source){
+					case ANDROID:
+						//connect_auto will take care of this later - ignore
+						if( ! auto_enabled)
+							connect_android( port);
+						break;
+					case MOUSE:
+						//connect_auto will take care of this later - ignore
+						if( ! auto_enabled)
+							connect_mouse( port);
+						break;
+					case LEAP:
+						//connect_auto will take care of this later - ignore
+						if( ! auto_enabled)
+							connect_leap( port);
+						break;
+					case SMART:
+						connect_smart( port);
+						break;
+					case WM_TOUCH:
+						//connect_auto will take care of this later - ignore
+						if( ! auto_enabled)
+							connect_windows( port);
+						break;
+					default: break;
+				}
+				//increment the port so next source's client doesn't conflict
+				port++;
+			}
+			if( auto_enabled) connect_auto( port);
 
-		world = new World( new Vec2( 0.0f, 0.0f), true);
-		//top
-		groundBody = createStaticBox( 0, -10.0f, applet.width, 10.f);
-		//bottom
-		createStaticBox( 0, applet.height + 10.0f, applet.width, 10.f);
-		//left
-		createStaticBox( -10.0f, 0, 10.0f, applet.height);
-		//right
-		createStaticBox( applet.width + 10.0f, 0, 10.0f, applet.height);
+			//there's got to be a better way
+			addJVMShutdownHook();
+
+			world = new World( new Vec2( 0.0f, 0.0f), true);
+			//top
+			groundBody = createStaticBox( 0, -10.0f, applet.width, 10.f);
+			//bottom
+			createStaticBox( 0, applet.height + 10.0f, applet.width, 10.f);
+			//left
+			createStaticBox( -10.0f, 0, 10.0f, applet.height);
+			//right
+			createStaticBox( applet.width + 10.0f, 0, 10.0f, applet.height);}
+		catch( NullPointerException exception){
+			android.util.Log.d(
+				"SMTAndroid", "You dun fricked up", exception);}
 	}
 
 	// touch server connection functions
