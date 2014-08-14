@@ -21,7 +21,6 @@
 package vialab.SMT;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -46,6 +45,7 @@ import TUIO.TuioTime;
 
 //local imports
 import vialab.SMT.renderer.*;
+import vialab.SMT.util.*;
 
 /**
  * This is the main zone class which all other Zones extend. It holds the zone's
@@ -71,9 +71,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	@Deprecated
 	public int height, width;
 	/** The dimensions of the zone */
-	protected Dimension dimension;
 	/** The half-dimensions of the zone */
-	protected Dimension halfDimension;
 
 	//The zone's transformation matrix
 	protected PMatrix3D matrix = new PMatrix3D();
@@ -267,8 +265,6 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.dimension = new Dimension( width, height);
-		this.halfDimension = new Dimension( width / 2, height / 2);
 		this.renderer_name = renderer;
 		this.rntRadius = Math.min( width, height) / 4;
 
@@ -349,7 +345,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 			pushStyle();
 			noTint();
 			image( extra_graphics,
-				0, 0, dimension.width, dimension.height);
+				0, 0, this.width, this.height);
 			//cleanup
 			popStyle();
 			popMatrix();
@@ -462,7 +458,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 			pushStyle();
 			noTint();
 			image( extra_graphics,
-				0, 0, dimension.width, dimension.height);
+				0, 0, this.width, this.height);
 			popStyle();
 			popMatrix();
 		}
@@ -1255,8 +1251,8 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 			//push to new location
 			if( ! ( translate_x || translate_y))
 				translate(
-					halfDimension.width,
-					halfDimension.height, 0);
+					width / 2,
+					height / 2, 0);
 			else
 				translate(
 					translate_x ? t00.x : 0,
@@ -1281,8 +1277,8 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 			//pull from old location
 			if( ! ( translate_x || translate_y))
 				translate(
-					- halfDimension.width,
-					- halfDimension.height, 0);
+					- width / 2,
+					- height / 2, 0);
 			else
 				translate(
 					translate_x ? - t01.x : 0,
@@ -1749,7 +1745,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	@Override
 	public int hashCode(){
 		return Objects.hash(
-			applet, parent, name, x, y, height, width, dimension,
+			applet, parent, name, x, y, height, width,
 			matrix, pickColor, renderer_name, direct);
 	}
 
@@ -1830,9 +1826,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * This method does nothing to normal, 'direct', zones.
 	 */
 	public void refreshResolution(){
-		//get needed info
-		Dimension screen_size = this.getScreenSize();
-		setResolution( screen_size);
+		throw new RemovedFeatureException();
 	}
 
 	/**
@@ -1840,14 +1834,14 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 *
 	 * This method does nothing to normal, 'direct', zones.
 	 */
-	public void setResolution( Dimension desired_size){
+	public void setResolution( int desired_width, int desired_height){
 		//don't bother if we're direct
 		if( direct) return;
 
 		//create offscreen graphics context
 		PGraphics extra_object = applet.createGraphics(
-			desired_size.width,
-			desired_size.height,
+			desired_width,
+			desired_height,
 			this.renderer_name);
 		//check the class
 		if( ! ( extra_object instanceof PGraphics3D))
@@ -1860,8 +1854,8 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 			extra_matrix = new PMatrix3D();
 		else
 			extra_matrix.reset();
-		float scale_x = (float) desired_size.width / dimension.width;
-		float scale_y = (float) desired_size.height / dimension.height;
+		float scale_x = (float) desired_width / this.width;
+		float scale_y = (float) desired_height / this.height;
 		extra_matrix.scale( scale_x, scale_y);
 		//finish up
 		setModified();
@@ -1871,7 +1865,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * Resizes the extra_graphics object to match the current dimensions of the Zone
 	 */
 	protected void initExtraGraphics(){
-		setResolution( this.dimension);
+		setResolution( this.width, this.height);
 	}
 
 	/**
@@ -2225,8 +2219,6 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 		super.setSize( width, height);
 		this.width = width;
 		this.height = height;
-		this.dimension = new Dimension( width, height);
-		this.halfDimension = new Dimension( width / 2, height / 2);
 	}
 
 	/**
@@ -2234,14 +2226,14 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * @param width the desired width of this zone
 	 */
 	public void setWidth( int width){
-		this.setSize( width, dimension.height);
+		this.setSize( width, this.height);
 	}
 	/**
 	 * Set the height of this zone
 	 * @param height the desired height of this zone
 	 */
 	public void setHeight( int height){
-		this.setSize( dimension.width, height);
+		this.setSize( this.width, height);
 	}
 
 	/**
@@ -2287,23 +2279,24 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * Get the dimensions of this zone
 	 * @return the dimensions of this zone
 	 */
-	public Dimension getSize(){
-		return dimension;
+	public Object getSize() throws RemovedFeatureException {
+		throw new RemovedFeatureException();
 	}
 	/**
 	 * Get the dimensions of this zone, as it appears on the screen
 	 * @return the dimensions of this zone
 	 */
-	public Dimension getScreenSize(){
-		PMatrix3D global = this.getGlobalMatrix();
+	public Object getScreenSize() throws RemovedFeatureException {
+		throw new RemovedFeatureException();
+/*		PMatrix3D global = this.getGlobalMatrix();
 		//origin vector
 		PVector o0 = new PVector( 0, 0);
 		//width vector
 		PVector w0 = new PVector(
-			dimension.width, 0);
+			this.width, 0);
 		//height vector
 		PVector h0 = new PVector(
-			0, dimension.height);
+			0, this.height);
 		//apply matrix
 		PVector o1 = global.mult( o0, null);
 		PVector w1 = global.mult( w0, null);
@@ -2313,15 +2306,15 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 		float height = o1.dist( h1);
 		return new Dimension(
 			Math.round( width),
-			Math.round( height));
+			Math.round( height));*/
 	}
 
 	/**
 	 * Set the half dimensions of this zone
 	 * @return the half dimensions of this zone
 	 */
-	public Dimension getHalfSize(){
-		return halfDimension;
+	public Object getHalfSize() throws RemovedFeatureException {
+		throw new RemovedFeatureException();
 	}
 
 	/**
@@ -2364,7 +2357,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 		stroke( 255, 127, 39, 155);
 		ellipseMode(RADIUS);
 		ellipse(
-			halfDimension.width, halfDimension.height,
+			this.width / 2, this.height / 2,
 			rntRadius, rntRadius);
 		popMatrix();
 		popStyle();
@@ -2375,8 +2368,8 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 */
 	public PVector getCentre(){
 		return fromZoneVector( new PVector(
-			halfDimension.width,
-			halfDimension.height));
+			this.width / 2,
+			this.height / 2));
 	}
 
 	/**

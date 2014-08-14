@@ -26,22 +26,6 @@ class_files = \
 	bin/vialab/SMT/SMTTouchManager.class \
 	bin/vialab/SMT/SMTTuioListener.class \
 	bin/vialab/SMT/SMTUtilities.class \
-	bin/vialab/SMT/swipekeyboard/AnchorZone.class \
-	bin/vialab/SMT/swipekeyboard/ArrowKeysLayout.class \
-	bin/vialab/SMT/swipekeyboard/CondensedLayout.class \
-	bin/vialab/SMT/swipekeyboard/DebugSwipeKeyboardListener.class \
-	bin/vialab/SMT/swipekeyboard/DefaultSwipeResolver.class \
-	bin/vialab/SMT/swipekeyboard/ExtendedLayout.class \
-	bin/vialab/SMT/swipekeyboard/KeyZone.class \
-	bin/vialab/SMT/swipekeyboard/ModifierKeyZone.class \
-	bin/vialab/SMT/swipekeyboard/SwipeKeyboardEvent.class \
-	bin/vialab/SMT/swipekeyboard/SwipeKeyboardLayout.class \
-	bin/vialab/SMT/swipekeyboard/SwipeKeyboardListener.class \
-	bin/vialab/SMT/swipekeyboard/SwipeKeyEvent.class \
-	bin/vialab/SMT/swipekeyboard/SwipeKeyListener.class \
-	bin/vialab/SMT/swipekeyboard/SwipeKeyZone.class \
-	bin/vialab/SMT/swipekeyboard/SwipeResolver.class \
-	bin/vialab/SMT/SwipeKeyboard.class \
 	bin/vialab/SMT/TabZone.class \
 	bin/vialab/SMT/TexturedTouchDrawer.class \
 	bin/vialab/SMT/TextureZone.class \
@@ -57,6 +41,7 @@ class_files = \
 	bin/vialab/SMT/util/ProxyTuioListener.class \
 	bin/vialab/SMT/util/SketchTouchBinder.class \
 	bin/vialab/SMT/util/TouchBinder.class \
+	bin/vialab/SMT/util/RemovedFeatureException.class \
 	bin/vialab/SMT/util/ZonePicker.class \
 	bin/vialab/SMT/ViewportZone.class \
 	bin/vialab/SMT/Zone.class \

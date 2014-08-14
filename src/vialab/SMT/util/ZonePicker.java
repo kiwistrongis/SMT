@@ -157,6 +157,7 @@ public class ZonePicker {
 	 * Prepare the picking graphics context for picking
 	 */
 	public void render(){
+		if( true) return;
 		//set up for rendering the pick buffer
 		renderer.pushDelegate( picking_context);
 		renderer.beginDraw();
