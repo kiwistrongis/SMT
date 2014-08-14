@@ -55,7 +55,7 @@ import vialab.SMT.renderer.*;
  * @author Erik Paluka, Zach Cook
  * @version 1.0
  */
-public class Zone extends PGraphics3DDelegate implements PConstants, KeyListener {
+public class Zone extends PGraphics3DDelegate implements PConstants {
 
 	//parent applet
 	protected PApplet applet;
@@ -2736,7 +2736,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants, KeyListener
 	 * then calls them on this zone.
 	 * @param event the key pressed event to be converted
 	 */
-	@Override
+	//@Override
 	public void keyPressed( java.awt.event.KeyEvent event){
 		this.invokeKeyPressedMethod(
 			new KeyEvent(
@@ -2753,7 +2753,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants, KeyListener
 	 * then calls them on this zone.
 	 * @param event the key released event to be converted
 	 */
-	@Override
+	//@Override
 	public void keyReleased( java.awt.event.KeyEvent event){
 		this.invokeKeyReleasedMethod(
 			new KeyEvent(
@@ -2770,7 +2770,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants, KeyListener
 	 * then calls them on this zone.
 	 * @param event the key typed event to be converted
 	 */
-	@Override
+	//@Override
 	public void keyTyped( java.awt.event.KeyEvent event){
 		this.invokeKeyTypedMethod(
 			new KeyEvent(

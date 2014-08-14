@@ -40,27 +40,8 @@ bin/vialab/SMT/swipekeyboard/SwipeKeyZone.class: \
 bin/vialab/SMT/swipekeyboard/SwipeResolver.class:
 
 #util package
-bin/vialab/SMT/util/ActiveDisplayTouchBinder.class: \
-	bin/vialab/SMT/util/SystemAdapter.class \
-	bin/vialab/SMT/util/TouchBinder.class \
-
-bin/vialab/SMT/util/DisplayTouchBinder.class: \
-	bin/vialab/SMT/util/SystemAdapter.class \
-	bin/vialab/SMT/util/TouchBinder.class \
-
-bin/vialab/SMT/util/RectTouchBinder.class: \
-	bin/vialab/SMT/util/SystemAdapter.class \
-	bin/vialab/SMT/util/TouchBinder.class \
-
-bin/vialab/SMT/util/ScreenTouchBinder.class: \
-	bin/vialab/SMT/util/SystemAdapter.class \
-	bin/vialab/SMT/util/TouchBinder.class \
-
 bin/vialab/SMT/util/SketchTouchBinder.class: \
-	bin/vialab/SMT/util/SystemAdapter.class \
 	bin/vialab/SMT/util/TouchBinder.class \
-
-bin/vialab/SMT/util/SystemAdapter.class: \
 
 bin/vialab/SMT/util/TouchBinder.class: \
 
@@ -139,11 +120,7 @@ bin/vialab/SMT/SMT.class: \
 	bin/vialab/SMT/TouchDraw.class \
 	bin/vialab/SMT/TouchSource.class \
 	bin/vialab/SMT/TouchState.class \
-	bin/vialab/SMT/util/ActiveDisplayTouchBinder.class \
-	bin/vialab/SMT/util/DisplayTouchBinder.class \
 	bin/vialab/SMT/util/ProxyTuioListener.class \
-	bin/vialab/SMT/util/RectTouchBinder.class \
-	bin/vialab/SMT/util/ScreenTouchBinder.class \
 	bin/vialab/SMT/util/SketchTouchBinder.class \
 	bin/vialab/SMT/util/TouchBinder.class \
 	bin/vialab/SMT/util/ZonePicker.class \

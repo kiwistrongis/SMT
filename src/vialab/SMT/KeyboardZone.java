@@ -655,7 +655,7 @@ public class KeyboardZone extends Zone {
 	@Override
 	public boolean add(Zone z){
 		if(!(z instanceof KeyZone)){
-			this.addKeyListener(z);
+			//this.addKeyListener(z);
 		}
 		return super.add(z);
 	}
@@ -668,7 +668,7 @@ public class KeyboardZone extends Zone {
 	@Override
 	public boolean remove(Zone z){
 		if(!(z instanceof KeyZone)){
-			this.removeKeyListener(z);
+			//this.removeKeyListener(z);
 		}
 		return super.remove(z);
 	}
@@ -726,7 +726,7 @@ public class KeyboardZone extends Zone {
 	 * @return A KeyListener[] containing all KeyListeners on this keyboard
 	 */
 	public KeyListener[] getKeyListeners() {
-		return keyListeners.toArray(new Zone[keyListeners.size()]);
+		return keyListeners.toArray( null);
 	}
 
 	/**

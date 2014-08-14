@@ -19,7 +19,7 @@ import vialab.SMT.swipekeyboard.*;
  * A Zone that provides swipe keyboard functionality.
  */
 public class SwipeKeyboard extends Zone
-		implements SwipeKeyListener, KeyListener, TouchListener{
+		implements SwipeKeyListener, TouchListener{
 	///////////////////
 	// debug fields //
 	///////////////////
@@ -168,7 +168,7 @@ public class SwipeKeyboard extends Zone
 	 */
 	public void addKey( KeyZone key){
 		this.keys.add( key);
-		key.addKeyListener( this);
+		//key.addKeyListener( this);
 	}
 	/**
 	 * Adds a modifier key to the keyboard.
@@ -176,7 +176,7 @@ public class SwipeKeyboard extends Zone
 	 */
 	public void addModifierKey( ModifierKeyZone key){
 		this.modifierKeys.add( key);
-		key.addKeyListener( this);
+		//key.addKeyListener( this);
 	}
 	/**
 	 * Adds an swipe key to the keyboard.
@@ -184,7 +184,7 @@ public class SwipeKeyboard extends Zone
 	 */
 	public void addSwipeKey( SwipeKeyZone key){
 		this.swipeKeys.add( key);
-		key.addKeyListener( this);
+		//key.addKeyListener( this);
 		key.addSwipeKeyListener( this);
 	}
 	/**

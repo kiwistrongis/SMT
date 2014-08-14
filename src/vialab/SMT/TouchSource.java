@@ -10,7 +10,7 @@ package vialab.SMT;
   * 
   * WM_TOUCH - Use Windows Touch back end, for Windows devices that support multi-touch.
   * 
-  * ANDROID - Use Android back end, only available using processing for Android, which currently doesn't work.
+  * ANDROID - Use Android back end, only available using processing for Android.
   * 
   * SMART - Use SMART SDK back end, when running on SMART hardware, such as the SMART Table.
   * 
@@ -35,8 +35,7 @@ public enum TouchSource {
 	 */
 	WM_TOUCH,
 	/**
-	 * Use Android back end, only available using processing for Android, which
-	 * currently doesn't work
+	 * Use Android back end, only available using processing for Android
 	 */
 	ANDROID,
 	/**
