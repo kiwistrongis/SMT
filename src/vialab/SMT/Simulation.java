@@ -25,11 +25,12 @@
  */
 package vialab.SMT;
 
-import java.awt.Point;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.Hashtable;
+
+import vialab.SMT.awt.Point;
 
 import com.illposed.osc.*;
 

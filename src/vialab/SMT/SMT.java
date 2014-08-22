@@ -25,7 +25,6 @@
 package vialab.SMT;
 
 //standard library imports
-import java.awt.Point;
 import java.io.*;
 import java.lang.reflect.Method;
 import java.net.Socket;
@@ -44,6 +43,7 @@ import processing.core.*;
 import processing.opengl.*;
 
 //local imports
+import vialab.SMT.awt.Point;
 import vialab.SMT.renderer.*;
 import vialab.SMT.util.*;
 

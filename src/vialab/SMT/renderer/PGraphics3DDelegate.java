@@ -1,6 +1,5 @@
 package vialab.SMT.renderer;
 
-import java.awt.Image;
 import processing.core.*;
 import processing.opengl.*;
 
@@ -826,14 +825,6 @@ public class PGraphics3DDelegate extends PGraphics3D {
 			return super.getCache(image);
 		else
 			return delegate.getCache(image);
-	}
-
-	public Image getImage() {
-		PGraphics3D delegate = this.getDelegate();
-		if( delegate == this)
-			return super.getImage();
-		else
-			return delegate.getImage();
 	}
 
 	public PMatrix getMatrix() {

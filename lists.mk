@@ -1,5 +1,9 @@
-#lists
+	#lists
 class_files = \
+	bin/vialab/SMT/awt/Color.class \
+	bin/vialab/SMT/awt/Dimension.class \
+	bin/vialab/SMT/awt/Point.class \
+	bin/vialab/SMT/awt/Rectangle.class \
 	bin/vialab/SMT/AndroidToTUIO.class \
 	bin/vialab/SMT/ButtonZone.class \
 	bin/vialab/SMT/CheckBoxZone.class \
@@ -8,16 +12,13 @@ class_files = \
 	bin/vialab/SMT/event/TouchListener.class \
 	bin/vialab/SMT/Finger.class \
 	bin/vialab/SMT/ImageZone.class \
-	bin/vialab/SMT/KeyboardZone.class \
 	bin/vialab/SMT/LeftPopUpMenuZone.class \
 	bin/vialab/SMT/MainZone.class \
 	bin/vialab/SMT/MouseToTUIO.class \
 	bin/vialab/SMT/PatternUnlockZone.class \
 	bin/vialab/SMT/PieMenuZone.class \
 	bin/vialab/SMT/renderer/P3DDSRenderer.class \
-	bin/vialab/SMT/renderer/PGLDSRenderer.class \
 	bin/vialab/SMT/renderer/PGraphics3DDelegate.class \
-	bin/vialab/SMT/renderer/PGraphicsOpenGLDelegate.class \
 	bin/vialab/SMT/ShapeZone.class \
 	bin/vialab/SMT/Simulation.class \
 	bin/vialab/SMT/SlideRevealZone.class \
@@ -29,7 +30,6 @@ class_files = \
 	bin/vialab/SMT/TabZone.class \
 	bin/vialab/SMT/TexturedTouchDrawer.class \
 	bin/vialab/SMT/TextureZone.class \
-	bin/vialab/SMT/TextZone.class \
 	bin/vialab/SMT/Touch.class \
 	bin/vialab/SMT/TouchClient.class \
 	bin/vialab/SMT/TouchDraw.class \
@@ -47,6 +47,12 @@ class_files = \
 	bin/vialab/SMT/Zone.class \
 
 source_files = \
+	src/vialab/SMT/awt/Color.java \
+	src/vialab/SMT/awt/Dimension.java \
+	src/vialab/SMT/awt/KeyEvent.java \
+	src/vialab/SMT/awt/KeyListener.java \
+	src/vialab/SMT/awt/Point.java \
+	src/vialab/SMT/awt/Rectangle.java \
 	src/vialab/SMT/AndroidToTUIO.java \
 	src/vialab/SMT/ButtonZone.java \
 	src/vialab/SMT/CheckBoxZone.java \

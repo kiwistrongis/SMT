@@ -23,13 +23,13 @@
  */
 package vialab.SMT;
 
-import java.awt.Point;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
 
-import processing.core.PConstants;
+import vialab.SMT.awt.Point;
 
+import processing.core.PConstants;
 import processing.event.MouseEvent;
 
 /**

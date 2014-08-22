@@ -2,8 +2,6 @@ package vialab.SMT;
 
 //standard library imports
 import java.util.Vector;
-import java.util.Vector;
-import java.awt.Color;
 
 //processing library imports
 import processing.core.*;
@@ -12,6 +10,7 @@ import processing.core.*;
 import TUIO.*;
 
 //local imports
+import vialab.SMT.awt.Color;
 import vialab.SMT.event.*;
 import vialab.SMT.util.*;
 

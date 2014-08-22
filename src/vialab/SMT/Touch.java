@@ -1,8 +1,6 @@
 package vialab.SMT;
 
 //standard library imports
-import java.awt.Color;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -13,6 +11,8 @@ import processing.core.*;
 import TUIO.*;
 
 //local imports
+import vialab.SMT.awt.Color;
+import vialab.SMT.awt.Point;
 import vialab.SMT.event.*;
 import vialab.SMT.util.*;
 

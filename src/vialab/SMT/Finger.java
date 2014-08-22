@@ -25,7 +25,7 @@
  */
 package vialab.SMT;
 
-import java.awt.Point;
+import vialab.SMT.awt.Point;
 import java.util.Vector;
 
 /**

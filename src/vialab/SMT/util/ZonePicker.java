@@ -1,7 +1,6 @@
 package vialab.SMT.util;
 
 //standard library imports
-import java.awt.Color;
 import java.nio.ByteBuffer;
 import java.util.*;
 import javax.media.opengl.GL;
@@ -11,6 +10,7 @@ import processing.core.*;
 import processing.opengl.*;
 
 //local imports
+import vialab.SMT.awt.Color;
 import vialab.SMT.*;
 import vialab.SMT.renderer.*;
 

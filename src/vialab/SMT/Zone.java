@@ -20,8 +20,6 @@
  */
 package vialab.SMT;
 
-import java.awt.Color;
-import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -44,6 +42,7 @@ import processing.opengl.PGraphics3D;
 import TUIO.TuioTime;
 
 //local imports
+import vialab.SMT.awt.Color;
 import vialab.SMT.renderer.*;
 import vialab.SMT.util.*;
 
@@ -612,40 +611,40 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * Invokes the appropriate keyPressed function for this zone.
 	 * @param event the key event that occured
 	 */
-	public void invokeKeyPressedMethod( KeyEvent event){
+	/*public void invokeKeyPressedMethod( KeyEvent event){
 		if( method_keyPressed != null)
 			SMTUtilities.invoke( method_keyPressed, applet, this, event);
 		else if( keyPressedImpl_overridden)
 			keyPressedImpl( event);
 		else
 			keyPressed( event);
-	}
+	}*/
 
 	/**
 	 * Invokes the appropriate keyReleased function for this zone.
 	 * @param event the key event that occured
 	 */
-	public void invokeKeyReleasedMethod( KeyEvent event){
+	/*public void invokeKeyReleasedMethod( KeyEvent event){
 		if( method_keyReleased != null)
 			SMTUtilities.invoke( method_keyReleased, applet, this, event);
 		else if( keyReleasedImpl_overridden)
 			keyReleasedImpl( event);
 		else
 			keyReleased( event);
-	}
+	}*/
 
 	/**
 	 * Invokes the appropriate keyTyped function for this zone.
 	 * @param event the key event that occured
 	 */
-	public void invokeKeyTypedMethod( KeyEvent event){
+	/*public void invokeKeyTypedMethod( KeyEvent event){
 		if( method_keyTyped != null)
 			SMTUtilities.invoke( method_keyTyped, applet, this, event);
 		else if( keyTypedImpl_overridden)
 			keyTypedImpl( event);
 		else
 			keyTyped( event);
-	}
+	}*/
 
 	//default methods
 	/** Override to specify a behavior for draw */
@@ -686,7 +685,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * when a Processing KeyEvent is passed to the Zone
 	 * @param event The Processing KeyEvent that is sent to the Zone
 	 */
-	public void keyEvent( KeyEvent event){
+	/*public void keyEvent( KeyEvent event){
 		switch ( event.getAction()){
 			case KeyEvent.RELEASE:
 				invokeKeyReleasedMethod( event);
@@ -698,23 +697,23 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 				invokeKeyPressedMethod( event);
 				break;
 		}
-	}
+	}*/
 
 	/**
 	 * Override to specify a behavior for keyPressed 
 	 */
-	@Deprecated
-	protected void keyPressed( KeyEvent event){}
+	/*@Deprecated
+	protected void keyPressed( KeyEvent event){}*/
 	/**
 	 * Override to specify a behavior for keyReleased
 	 */
-	@Deprecated
-	protected void keyReleased( KeyEvent event){}
+	/*@Deprecated
+	protected void keyReleased( KeyEvent event){}*/
 	/**
 	 * Override to specify a behavior for keyTyped 
 	 */
-	@Deprecated
-	protected void keyTyped( KeyEvent event){}
+	/*@Deprecated
+	protected void keyTyped( KeyEvent event){}*/
 
 	//impl methods
 
@@ -2730,7 +2729,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * @param event the key pressed event to be converted
 	 */
 	//@Override
-	public void keyPressed( java.awt.event.KeyEvent event){
+	/*public void keyPressed( java.awt.event.KeyEvent event){
 		this.invokeKeyPressedMethod(
 			new KeyEvent(
 				event,
@@ -2739,7 +2738,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 				event.getModifiers(),
 				event.getKeyChar(),
 				event.getKeyCode()));
-	}
+	}*/
 
 	/**
 	 * Converts java key released events into their processing counterparts,
@@ -2747,7 +2746,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * @param event the key released event to be converted
 	 */
 	//@Override
-	public void keyReleased( java.awt.event.KeyEvent event){
+	/*public void keyReleased( java.awt.event.KeyEvent event){
 		this.invokeKeyReleasedMethod(
 			new KeyEvent(
 				event,
@@ -2756,7 +2755,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 				event.getModifiers(),
 				event.getKeyChar(),
 				event.getKeyCode()));
-	}
+	}*/
 
 	/**
 	 * Converts java key typed events into their processing counterparts,
@@ -2764,7 +2763,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * @param event the key typed event to be converted
 	 */
 	//@Override
-	public void keyTyped( java.awt.event.KeyEvent event){
+	/*public void keyTyped( java.awt.event.KeyEvent event){
 		this.invokeKeyTypedMethod(
 			new KeyEvent(
 				event,
@@ -2773,7 +2772,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 				event.getModifiers(),
 				event.getKeyChar(),
 				event.getKeyCode()));
-	}
+	}*/
 
 	//////////////////////////////
 	// Color protection methods //
