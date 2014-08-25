@@ -67,7 +67,7 @@ public class ZonePicker {
 		}
 
 		//get a new colour
-		zone.setPickColor( new Color( currentColor, false));
+		zone.setPickColor( new Color( currentColor));
 		int pixelColor = 0xff + ( currentColor << 8);
 		zoneMap.put( pixelColor, zone);
 
@@ -157,7 +157,6 @@ public class ZonePicker {
 	 * Prepare the picking graphics context for picking
 	 */
 	public void render(){
-		if( true) return;
 		//set up for rendering the pick buffer
 		renderer.pushDelegate( picking_context);
 		renderer.beginDraw();
@@ -168,10 +167,10 @@ public class ZonePicker {
 		renderer.endDraw();
 		renderer.flush();
 		// If fast picking disabled, use loadPixels() which is really slow (max 70 fps on a high end card vs 200+ fps with readPixels) as a backup.
-		PGL pgl = renderer.beginPGL();
+		/*PGL pgl = renderer.beginPGL();
 		if ( ! SMT.fastPickingEnabled() || pgl == null)
 			renderer.loadPixels();
-		renderer.endPGL();
+		renderer.endPGL();*/
 		renderer.popDelegate();
 	}
 }

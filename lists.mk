@@ -4,7 +4,6 @@ class_files = \
 	bin/vialab/SMT/awt/Dimension.class \
 	bin/vialab/SMT/awt/Point.class \
 	bin/vialab/SMT/awt/Rectangle.class \
-	bin/vialab/SMT/AndroidToTUIO.class \
 	bin/vialab/SMT/ButtonZone.class \
 	bin/vialab/SMT/CheckBoxZone.class \
 	bin/vialab/SMT/ContainerZone.class \
@@ -53,7 +52,6 @@ source_files = \
 	src/vialab/SMT/awt/KeyListener.java \
 	src/vialab/SMT/awt/Point.java \
 	src/vialab/SMT/awt/Rectangle.java \
-	src/vialab/SMT/AndroidToTUIO.java \
 	src/vialab/SMT/ButtonZone.java \
 	src/vialab/SMT/CheckBoxZone.java \
 	src/vialab/SMT/ContainerZone.java \

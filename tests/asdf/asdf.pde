@@ -1,4 +1,4 @@
-import java.awt.Dimension;
+import vialab.SMT.awt.Dimension;
 import vialab.SMT.*;
 
 Zone asdf;

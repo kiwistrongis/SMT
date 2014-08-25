@@ -110,7 +110,6 @@ bin/vialab/SMT/SliderZone.class: \
 	bin/vialab/SMT/Zone.class
 
 bin/vialab/SMT/SMT.class: \
-	bin/vialab/SMT/AndroidToTUIO.class \
 	bin/vialab/SMT/MainZone.class \
 	bin/vialab/SMT/MouseToTUIO.class \
 	bin/vialab/SMT/SMTTouchManager.class \

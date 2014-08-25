@@ -38,6 +38,10 @@ import org.jbox2d.dynamics.*;
 //libtuio imports
 import TUIO.*;
 
+//android imports
+import android.view.MotionEvent;
+import android.view.SurfaceView;
+
 //processing imports
 import processing.core.*;
 import processing.opengl.*;
@@ -74,8 +78,8 @@ public class SMT {
 
 	protected static Zone sketch;
 	protected static PApplet applet;
-	//picker is temporarily public for debugging purposes.
-	public static ZonePicker picker;
+	protected static SurfaceView applet_surfaceView;
+	protected static ZonePicker picker;
 	protected static SMTTuioListener listener;
 	protected static SMTTouchManager manager;
 	protected static Method touch;
@@ -101,7 +105,6 @@ public class SMT {
 		TouchSource.ANDROID;
 
 	//TUIO adapters
-	protected static AndroidToTUIO att = null;
 	protected static MouseToTUIO mtt = null;
 
 	protected static LinkedList<BufferedReader> tuioServerErrList =
@@ -210,9 +213,9 @@ public class SMT {
 				"Null applet parameter, pass 'this' to SMT.init() instead of null");
 
 		//check processing version
-		if( ! pversion_override)
+		/*if( ! pversion_override)
 			if( ! checkProcessingVersion())
-				return;
+				return;*/
 
 		//check renderer
 		if( ! P3DDSRenderer.class.isInstance( applet.g))
@@ -224,9 +227,10 @@ public class SMT {
 
 		//load applet methods
 		SMT.applet = applet;
-		SMTUtilities.loadMethods( applet.getClass());
+		SMT.applet_surfaceView = applet.getSurfaceView();
 
-		//load system adapter
+		//load global smt methods
+		SMTUtilities.loadMethods( applet.getClass());
 
 		//load default touch bounds
 		SMT.setTouchSourceBoundsSketch( TouchSource.MOUSE,	
@@ -249,71 +253,8 @@ public class SMT {
 		manager = new SMTTouchManager( listener, picker);
 		mainListenerPort = port;
 
-		//remove duplicate touch sources and stuff
-		boolean auto_enabled = false;
-		boolean tuio_enabled = false;
-		Vector<TouchSource> filteredSources = new Vector<TouchSource>();
-		for( TouchSource source : sources)
-			if( source == TouchSource.AUTOMATIC ||
-					source == TouchSource.MULTIPLE)
-				auto_enabled = true;
-			else if( source == TouchSource.TUIO_DEVICE)
-				tuio_enabled = true;
-			else if( ! filteredSources.contains( source))
-				filteredSources.add( source);
-
-		//the tuio adapter should always started first
-		// so it uses the parameter-specified port.
-		if( tuio_enabled || auto_enabled){
-			try{ connect_tuio( port);}
-			catch( TuioConnectionException exception){
-				System.out.printf(
-					"Opening a tuio listener on port %d failed. Tuio devices probably won't work.\n", port);
-			}
-			//increment port regardless of success so tuio devices don't get mistaken for other sources
-			// if this connection failed, the port is probably going to be incremented anyways when opening a new listener.
-			port++;
-		}
-		//connect to every specified touch source
-		if( false) for( TouchSource source : filteredSources){
-			//open a new listener
-			TuioClient client = null;
-			while( client == null)
-				try{ client = openTuioClient( port);}
-				catch( TuioConnectionException exception){
-					port++;
-				}
-
-			switch (source){
-				case ANDROID:
-					//connect_auto will take care of this later - ignore
-					if( ! auto_enabled)
-						connect_android( port);
-					break;
-				case MOUSE:
-					//connect_auto will take care of this later - ignore
-					if( ! auto_enabled)
-						connect_mouse( port);
-					break;
-				case LEAP:
-					//connect_auto will take care of this later - ignore
-					if( ! auto_enabled)
-						connect_leap( port);
-					break;
-				case SMART:
-					connect_smart( port);
-					break;
-				case WM_TOUCH:
-					//connect_auto will take care of this later - ignore
-					if( ! auto_enabled)
-						connect_windows( port);
-					break;
-				default: break;
-			}
-			//increment the port so next source's client doesn't conflict
-			port++;
-		}
-		if( auto_enabled) connect_auto( port);
+		//connect to android touches
+		connect_android();
 
 		//there's got to be a better way
 		addJVMShutdownHook();
@@ -329,111 +270,7 @@ public class SMT {
 		createStaticBox( applet.width + 10.0f, 0, 10.0f, applet.height);
 	}
 
-	// touch server connection functions
-	private static void connect_auto( int port){
-		//gather system information
-		boolean os_android =
-			System.getProperty( "java.vm.name")
-				.equalsIgnoreCase( "dalvik");
-		String os_string = System.getProperty( "os.name");
-		boolean os_windows = os_string.startsWith( "Windows");
-
-		//other variables
-		TuioClient client = null;
-
-		//connect to tuio devices
-		// already handled before this method call
-
-		//connect to android touch
-		if( os_android){
-			/*client = null; //just in case... aha
-			//open a new listener
-			while( client == null)
-				try{ client = openTuioClient( port);}
-				catch( TuioConnectionException exception){
-					port++;
-				}
-			if( SMT.debug) System.out.printf(
-				"Trying to connect to %s on port %d\n",
-				"android touch", port);
-			connect_android( port);*/
-		}
-
-		if( os_windows){
-			//connect to leap motion
-			client = null;
-			while( client == null)
-				try{ client = openTuioClient( port);}
-				catch( TuioConnectionException exception){
-					port++;
-				}
-			if( SMT.debug) System.out.printf(
-				"Trying to connect to %s on port %d\n",
-				"leap motion", port);
-			connect_leap( port);
-
-			//connect to windows touch
-			client = null;
-			while( client == null)
-				try{ client = openTuioClient( port);}
-				catch( TuioConnectionException exception){
-					port++;
-				}
-			if( SMT.debug) System.out.printf(
-				"Trying to connect to %s on port %d\n",
-				"windows touch", port);
-			connect_windows( port);
-		}
-
-		//connect to mouse
-		if( ! os_android){
-			client = null;
-			while( client == null)
-				try{ client = openTuioClient( port);}
-				catch( TuioConnectionException exception){
-					port++;
-				}
-			if( SMT.debug) System.out.printf(
-				"Trying to connect to %s on port %d\n",
-				"mouse emulation", port);
-			connect_mouse( port);
-		}
-	}
-	private static void connect_android( int port){
-		att = new AndroidToTUIO(
-			applet.width, applet.height, port);
-		deviceMap.put( port, TouchSource.ANDROID);
-		printConnectMessage( "android touch", port);
-	}
-	private static void connect_leap( int port){
-		SMT.runLeapTuioServer( port);
-		deviceMap.put(port, TouchSource.LEAP);
-		printConnectMessage( "leap motion", port);
-	}
-	private static void connect_mouse( int port){
-		mtt = new MouseToTUIO( applet.width, applet.height, port);
-		applet.registerMethod( "mouseEvent", mtt);
-		deviceMap.put( port, TouchSource.MOUSE);
-		printConnectMessage( "mouse emulation", port);
-	}
-	private static void connect_smart( int port){
-		SMT.runSmart2TuioServer();
-		deviceMap.put( port, TouchSource.SMART);
-		printConnectMessage( "not-so-smart table", port);
-	}
-	private static void connect_tuio( int port){
-		TuioClient client = openTuioClient( port);
-		tuioClientList.add( client);
-		deviceMap.put( port, TouchSource.TUIO_DEVICE);
-		printConnectMessage( "tuio devices", port);
-	}
-	private static void connect_windows( int port){
-		boolean system_is32 = ! System.getProperty( "os.arch").equals("x86");
-		SMT.runWinTouchTuioServer(
-			system_is32, "127.0.0.1", port);
-		deviceMap.put( port, TouchSource.WM_TOUCH);
-		printConnectMessage( "windows touch", port);
-	}
+	private static void connect_android(){}
 
 	// window binding method
 	/**
@@ -464,6 +301,10 @@ public class SMT {
 
 	public static void dlog( String message, Object... args){
 		android.util.Log.d( "SMTAndroid",
+			String.format( message, args));
+	}
+	public static void errlog( String message, Object... args){
+		android.util.Log.e( "SMTAndroid",
 			String.format( message, args), new RuntimeException());
 	}
 
@@ -645,19 +486,6 @@ public class SMT {
 			SMT.box2dScale * h / 2);
 		box.createFixture(boxShape, 0.0f);
 		return box;
-	}
-
-	/**
-	 * Redirects the MotionEvent object to AndroidToTUIO, used because current
-	 * version of Processing (2.x) does not support registerMethod("touchEvent",
-	 * target).
-	 * 
-	 * @param me
-	 *            MotionEvent - the motion event triggered in Android
-	 * @return Should the event get consumed elsewhere or not
-	 */
-	public static boolean passAndroidTouchEvent(Object me){
-		return att.onTouchEvent(me);
 	}
 
 	/** Gets all zones recognized by SMT

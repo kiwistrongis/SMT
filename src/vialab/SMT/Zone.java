@@ -42,7 +42,7 @@ import processing.opengl.PGraphics3D;
 import TUIO.TuioTime;
 
 //local imports
-import vialab.SMT.awt.Color;
+import vialab.SMT.awt.*;
 import vialab.SMT.renderer.*;
 import vialab.SMT.util.*;
 
@@ -2278,16 +2278,15 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * Get the dimensions of this zone
 	 * @return the dimensions of this zone
 	 */
-	public Object getSize() throws RemovedFeatureException {
-		throw new RemovedFeatureException();
+	public Dimension getSize(){
+		return new Dimension( this.width, this.height);
 	}
 	/**
 	 * Get the dimensions of this zone, as it appears on the screen
 	 * @return the dimensions of this zone
 	 */
-	public Object getScreenSize() throws RemovedFeatureException {
-		throw new RemovedFeatureException();
-/*		PMatrix3D global = this.getGlobalMatrix();
+	public Dimension getScreenSize(){
+		PMatrix3D global = this.getGlobalMatrix();
 		//origin vector
 		PVector o0 = new PVector( 0, 0);
 		//width vector
@@ -2305,7 +2304,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 		float height = o1.dist( h1);
 		return new Dimension(
 			Math.round( width),
-			Math.round( height));*/
+			Math.round( height));
 	}
 
 	/**
