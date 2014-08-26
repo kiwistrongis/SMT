@@ -38,6 +38,7 @@ class_files = \
 	bin/vialab/SMT/TouchState.class \
 	bin/vialab/SMT/TuioConnectionException.class \
 	bin/vialab/SMT/util/ProxyTuioListener.class \
+	bin/vialab/SMT/util/AndroidTouchListener.class \
 	bin/vialab/SMT/util/SketchTouchBinder.class \
 	bin/vialab/SMT/util/TouchBinder.class \
 	bin/vialab/SMT/util/RemovedFeatureException.class \
@@ -106,6 +107,7 @@ source_files = \
 	src/vialab/SMT/TouchState.java \
 	src/vialab/SMT/TuioConnectionException.java \
 	src/vialab/SMT/util/ProxyTuioListener.java \
+	src/vialab/SMT/util/AndroidTouchListener.java \
 	src/vialab/SMT/util/SketchTouchBinder.java \
 	src/vialab/SMT/util/TouchBinder.java \
 	src/vialab/SMT/util/ZonePicker.java \

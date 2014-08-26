@@ -80,7 +80,7 @@ public class SMT {
 	protected static PApplet applet;
 	protected static SurfaceView applet_surfaceView;
 	protected static ZonePicker picker;
-	protected static SMTTuioListener listener;
+	protected static AndroidTouchListener listener;
 	protected static SMTTouchManager manager;
 	protected static Method touch;
 	protected static Boolean warnUnimplemented;
@@ -249,7 +249,7 @@ public class SMT {
 		applet.registerMethod("pre", new SMT());
 
 		picker = new ZonePicker();
-		listener = new SMTTuioListener();
+		listener = new AndroidTouchListener();
 		manager = new SMTTouchManager( listener, picker);
 		mainListenerPort = port;
 

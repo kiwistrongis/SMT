@@ -12,8 +12,9 @@ public int sketchHeight(){
 	return displayHeight;}
 
 //variables
-AndroidTouchListener everything_listener;
-int sketch_orientation = LANDSCAPE;
+AndroidTouchTracker everything_listener;
+//int sketch_orientation = LANDSCAPE;
+int sketch_orientation = PORTRAIT;
 
 void setup(){
 	orientation( sketch_orientation);
@@ -22,7 +23,7 @@ void setup(){
 	SMT.add( new Zone( "Asdf", 220, 10, 100, 100));
 	
 	//other
-	everything_listener = new AndroidTouchListener();
+	everything_listener = new AndroidTouchTracker();
 	View sketch_view = this.surfaceView;
 	sketch_view.setOnTouchListener( everything_listener);
 }
@@ -82,45 +83,68 @@ public void drawTouchInfo(){
 		strokeWeight( 8);
 		ellipse( touch.getX(), touch.getY(), 50, 50);
 		fill( 240, 240, 240, 180);
-		textAlign(LEFT, TOP);
+		textAlign( LEFT, TOP);
 		textSize( 30);
 		text( touch_text, touch.x + 50, touch.y - 20);
 		popStyle();
 	}
 }
 
-private static class AndroidTouchListener implements View.OnTouchListener {
-	public AndroidTouchListener(){}
+private static class AndroidTouchTracker implements View.OnTouchListener {
+	public AndroidTouchTracker(){}
 	@Override
 	public boolean onTouch( View view, MotionEvent event){
-		int action = event.getAction();
+		int action = event.getActionMasked();
 		int action_index = event.getActionIndex();
 		int pointer_id = event.getPointerId( action_index);
 		int pointer_count = event.getPointerCount();
-		int x = event.getX();
-		int y = event.getY();
-		int x_raw = event.getRawX();
-		int y_raw = event.getRawY();
+		float x = event.getX();
+		float y = event.getY();
+		float x_raw = event.getRawX();
+		float y_raw = event.getRawY();
 
-		SMT.dlog(
-			"touch:\n\tindex: %d / %d\n" +
-			"\tid: %d action: %x\n" +
-			"\tposition: %f, %f raw: %f, %f",
-			action_index, pointer_count,
-			pointer_id, action,
-			x, y, x_raw, y_raw);
+		String action_string;
+		switch( action){
+			case MotionEvent.ACTION_CANCEL:
+				action_string = "action_cancel";
+				break;
+			case MotionEvent.ACTION_DOWN:
+				action_string = "action_down";
+				break;
+			case MotionEvent.ACTION_MOVE:
+				action_string = "action_move";
+				break;
+			case MotionEvent.ACTION_POINTER_DOWN:
+				action_string = "action_pointer_down";
+				break;
+			case MotionEvent.ACTION_POINTER_UP:
+				action_string = "action_pointer_up";
+				break;
+			case MotionEvent.ACTION_UP:
+				action_string = "action_up";
+				break;
+			default:
+				action_string = "unrecognized";
+				break;}
+
+		String message = "touches";
+		for( int index = 0; index < pointer_count; index++)
+			message += String.format(
+				"\n\tindex: %d, id: %d, pos: %f, %f",
+				index, event.getPointerId( index),
+				event.getX( index), event.getY( index));
+		SMT.dlog( message);
 
 		return false;
 	}
 }
 
 
-/*int ACTION_CANCEL
-int	ACTION_DOWN
-int	ACTION_MASK
-int	ACTION_MOVE
-int	ACTION_POINTER_DOWN
-int	ACTION_POINTER_INDEX_MASK
-int	ACTION_POINTER_INDEX_SHIFT
-int	ACTION_POINTER_UP
-int	ACTION_UP*/
+
+
+
+
+
+
+
+
