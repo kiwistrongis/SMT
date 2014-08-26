@@ -8,10 +8,10 @@ clean-specials:
 	rm -rf javadoc/ SMT/
 
 #variables
-version = 4.1
-cp = src:bin:lib/*:lib/processing/*
+version = 1.0
+cp = src:bin:lib/*
 dest = -d bin
-docscp = src:lib/*:lib/processing/*
+docscp = src:lib/*
 docs_dir = javadoc
 jar_file = library/SMT.jar
 package_file = SMT-$(version).zip

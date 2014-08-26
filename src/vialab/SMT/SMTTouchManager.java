@@ -2,6 +2,7 @@ package vialab.SMT;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Collection;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
@@ -10,18 +11,17 @@ import vialab.SMT.util.*;
 
 class SMTTouchManager {
 	private PApplet applet;
-	private SMTTuioListener tuioListener;
+	private AndroidTouchListener listener;
 	private ZonePicker picker;
 	private Method touchDown, touchMoved, touchUp;
-	static TouchState currentTouchState = new TouchState();
-	static TouchState previousTouchState;
-	static HashMap<Touch, Zone> touchPrevZone = new HashMap<Touch, Zone>();
+	private HashMap<Touch, Zone> touchPrevZone;
 
-	public SMTTouchManager( SMTTuioListener tuioListener, ZonePicker picker){
-		this.tuioListener = tuioListener;
+	public SMTTouchManager( AndroidTouchListener listener, ZonePicker picker){
+		this.listener = listener;
 		this.picker = picker;
 		this.applet = SMT.applet;
 		retrieveMethods( SMT.applet);
+		touchPrevZone = new HashMap<Touch, Zone>();
 	}
 
 	/**
@@ -32,8 +32,6 @@ class SMTTouchManager {
 		picker.render();
 
 		//update touch state
-		previousTouchState = new TouchState( currentTouchState);
-		currentTouchState.update( tuioListener.getCurrentTuioState());
 
 		//forward events, each touch should go through one of these three methods, and they are mutually exclusive
 		handleTouchesDown();
@@ -41,10 +39,11 @@ class SMTTouchManager {
 		handleTouchesMoved();
 	}
 
-	/**
-	 * Handles every touch in the current but not the previous state.
-	 */
-	protected void handleTouchesDown(){
+	protected void handleTouchesDown(){}
+	protected void handleTouchesUp(){}
+	protected void handleTouchesMoved(){}
+	
+	/*protected void handleTouchesDown(){
 		for ( Touch touch : currentTouchState)
 			// touchDowns only happen on new touches
 			if ( ! previousTouchState.contains( touch.sessionID)){
@@ -55,10 +54,6 @@ class SMTTouchManager {
 				touch.invokeTouchDownEvent();
 			}
 	}
-
-	/**
-	 * Handles every touch in the previous but not in the current state.
-	 */
 	protected void handleTouchesUp(){
 		for ( Touch touch : previousTouchState)
 			if ( ! currentTouchState.contains( touch.sessionID)){
@@ -73,11 +68,6 @@ class SMTTouchManager {
 				touch.invokeTouchUpEvent();
 			}
 	}
-
-	/**
-	 * Handles the movement of touches. A touch is "moved" if it is in both the
-	 * previous and current state
-	 */
 	protected void handleTouchesMoved(){
 		for ( Touch touch : currentTouchState)
 			if ( previousTouchState.contains( touch.sessionID)){
@@ -111,7 +101,7 @@ class SMTTouchManager {
 				touchPrevZone.put( touch, zone);
 				touch.invokeTouchMovedEvent();
 			}
-	}
+	}*/
 
 	private void doPress( Zone zone, Touch touch){
 		if ( zone != null)
@@ -122,10 +112,10 @@ class SMTTouchManager {
 	 * Called when a touch went down, or when an orphaned touch moves around.
 	 * @param zone may be null
 	 */
-	private void doTouchDown( Zone zone, Touch touchPoint){
+	private void doTouchDown( Zone zone, Touch touch){
 		if ( zone != null){
-			zone.assign( touchPoint);
-			zone.touchDownRegister( touchPoint);
+			zone.assign( touch);
+			zone.touchDownRegister( touch);
 		}
 	}
 
@@ -159,5 +149,9 @@ class SMTTouchManager {
 		SMTUtilities.methodSet.add( "touchDown");
 		SMTUtilities.methodSet.add( "touchMoved");
 		SMTUtilities.methodSet.add( "touchUp");
+	}
+
+	public Collection<Touch> getTouches(){
+		return null;
 	}
 }

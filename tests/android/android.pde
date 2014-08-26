@@ -1,7 +1,6 @@
 import vialab.SMT.*;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 
 //drawing options
 public String sketchRenderer(){
@@ -12,20 +11,14 @@ public int sketchHeight(){
 	return displayHeight;}
 
 //variables
-AndroidTouchTracker everything_listener;
 //int sketch_orientation = LANDSCAPE;
 int sketch_orientation = PORTRAIT;
 
 void setup(){
 	orientation( sketch_orientation);
 	SMT.init( this);
-	//SMT.dlog( "Hallo :)\n");
+
 	SMT.add( new Zone( "Asdf", 220, 10, 100, 100));
-	
-	//other
-	everything_listener = new AndroidTouchTracker();
-	View sketch_view = this.surfaceView;
-	sketch_view.setOnTouchListener( everything_listener);
 }
 
 void draw(){
@@ -66,12 +59,11 @@ public void drawTouchInfo(){
 	for( vialab.SMT.Touch touch : SMT.getTouches()){
 		String touch_text = String.format(
 			"id: %d\n" +
-				"port: %d\n" +
 				"source: %s\n" +
 				"raw: %.2f, %.2f\n" +
 				"fitted: %.2f, %.2f\n" +
 				"rounded: %d, %d",
-			touch.cursorID, touch.sessionID >> 48,
+			touch.cursorID,
 			touch.getTouchSource(),
 			touch.getRawX(), touch.getRawY(),
 			touch.getX(), touch.getY(),
@@ -89,62 +81,3 @@ public void drawTouchInfo(){
 		popStyle();
 	}
 }
-
-private static class AndroidTouchTracker implements View.OnTouchListener {
-	public AndroidTouchTracker(){}
-	@Override
-	public boolean onTouch( View view, MotionEvent event){
-		int action = event.getActionMasked();
-		int action_index = event.getActionIndex();
-		int pointer_id = event.getPointerId( action_index);
-		int pointer_count = event.getPointerCount();
-		float x = event.getX();
-		float y = event.getY();
-		float x_raw = event.getRawX();
-		float y_raw = event.getRawY();
-
-		String action_string;
-		switch( action){
-			case MotionEvent.ACTION_CANCEL:
-				action_string = "action_cancel";
-				break;
-			case MotionEvent.ACTION_DOWN:
-				action_string = "action_down";
-				break;
-			case MotionEvent.ACTION_MOVE:
-				action_string = "action_move";
-				break;
-			case MotionEvent.ACTION_POINTER_DOWN:
-				action_string = "action_pointer_down";
-				break;
-			case MotionEvent.ACTION_POINTER_UP:
-				action_string = "action_pointer_up";
-				break;
-			case MotionEvent.ACTION_UP:
-				action_string = "action_up";
-				break;
-			default:
-				action_string = "unrecognized";
-				break;}
-
-		String message = "touches";
-		for( int index = 0; index < pointer_count; index++)
-			message += String.format(
-				"\n\tindex: %d, id: %d, pos: %f, %f",
-				index, event.getPointerId( index),
-				event.getX( index), event.getY( index));
-		SMT.dlog( message);
-
-		return false;
-	}
-}
-
-
-
-
-
-
-
-
-
-

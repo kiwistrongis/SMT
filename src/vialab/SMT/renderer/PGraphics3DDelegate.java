@@ -1115,22 +1115,6 @@ public class PGraphics3DDelegate extends PGraphics3D {
 			return delegate.loadShape(filename);
 	}
 
-	public PShape loadShape(String filename, String options) {
-		PGraphics3D delegate = this.getDelegate();
-		if( delegate == this)
-			return super.loadShape(filename, options);
-		else
-			return delegate.loadShape(filename, options);
-	}
-
-	public void loadTexture() {
-		PGraphics3D delegate = this.getDelegate();
-		if( delegate == this)
-			super.loadTexture();
-		else
-			delegate.loadTexture();
-	}
-
 	public void mask(PImage alpha) {
 		PGraphics3D delegate = this.getDelegate();
 		if( delegate == this)
@@ -2019,28 +2003,12 @@ public class PGraphics3DDelegate extends PGraphics3D {
 			delegate.text(num, x, y, z);
 	}
 
-	public void text(char[] chars, int start, int stop, float x, float y) {
-		PGraphics3D delegate = this.getDelegate();
-		if( delegate == this)
-			super.text(chars, start, stop, x, y);
-		else
-			delegate.text(chars, start, stop, x, y);
-	}
-
 	public void text(String str, float x1, float y1, float x2, float y2) {
 		PGraphics3D delegate = this.getDelegate();
 		if( delegate == this)
 			super.text(str, x1, y1, x2, y2);
 		else
 			delegate.text(str, x1, y1, x2, y2);
-	}
-
-	public void text(char[] chars, int start, int stop, float x, float y, float z) {
-		PGraphics3D delegate = this.getDelegate();
-		if( delegate == this)
-			super.text(chars, start, stop, x, y, z);
-		else
-			delegate.text(chars, start, stop, x, y, z);
 	}
 
 	public void textAlign(int alignX) {
@@ -2129,30 +2097,6 @@ public class PGraphics3DDelegate extends PGraphics3D {
 			return super.textWidth(str);
 		else
 			return delegate.textWidth(str);
-	}
-
-	public float textWidth(char[] chars, int start, int length) {
-		PGraphics3D delegate = this.getDelegate();
-		if( delegate == this)
-			return super.textWidth(chars, start, length);
-		else
-			return delegate.textWidth(chars, start, length);
-	}
-
-	public void texture(PImage image) {
-		PGraphics3D delegate = this.getDelegate();
-		if( delegate == this)
-			super.texture(image);
-		else
-			delegate.texture(image);
-	}
-
-	public void textureMode(int mode) {
-		PGraphics3D delegate = this.getDelegate();
-		if( delegate == this)
-			super.textureMode(mode);
-		else
-			delegate.textureMode(mode);
 	}
 
 	public void textureSampling(int sampling) {

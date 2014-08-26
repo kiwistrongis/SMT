@@ -121,9 +121,9 @@ public class SMT {
 			new LinkedHashMap<Integer, TouchSource>());
 	private static EnumMap<TouchSource, TouchBinder> touchBinders =
 		new EnumMap<TouchSource, TouchBinder>( TouchSource.class);
-	private static TouchSource[] sources_notmouse = new TouchSource[]{
+	/*private static TouchSource[] sources_notmouse = new TouchSource[]{
 		TouchSource.TUIO_DEVICE, TouchSource.WM_TOUCH,
-		TouchSource.SMART, TouchSource.LEAP};
+		TouchSource.SMART, TouchSource.LEAP};*/
 
 	protected static int mainListenerPort;
 	protected static boolean inShutdown = false;
@@ -167,47 +167,11 @@ public class SMT {
 	protected SMT(){}
 
 	/**
-	 * Initializes SMT, begining listening to a TUIO source on the
-	 * default port of 3333 and using automatic touch source selection.
+	 * Initializes SMT on the desired sketch
 	 * 
 	 * @param applet The Processing PApplet, usually just 'this' when using the Processing IDE
 	 */
 	public static void init( PApplet applet){
-		init( applet, default_port, default_touchsource);
-	}
-
-	/**
-	 * Initializes SMT, begining listening to a TUIO source on the
-	 * specified port and using automatic touch source selection.
-	 * 
-	 * @param applet The Processing PApplet, usually just 'this' when using the Processing IDE
-	 * @param port The port to listen on
-	 */
-	public static void init( PApplet applet, int port){
-		init( applet, port, default_touchsource);
-	}
-
-	/**
-	 * Initializes SMT, begining listening to a TUIO source on the
-	 * default port of 3333 and using the specified touch sources.
-	 * 
-	 * @param applet The Processing PApplet, usually just 'this' when using the Processing IDE
-	 * @param sources The touch devices to try to listen to. One or more of: TouchSource.MOUSE, TouchSource.TUIO_DEVICE, TouchSource.ANDROID, TouchSource.WM_TOUCH, TouchSource.SMART, TouchSource.AUTOMATIC.
-	 */
-	public static void init( PApplet applet, TouchSource... sources){
-		init( applet, default_port, sources);
-	}
-
-	/**
-	 * Initializes SMT, begining listening to a TUIO source on the
-	 * specified port and using the specified touch sources.
-	 * 
-	 * @param applet The Processing PApplet, usually just 'this' when using the Processing IDE
-	 * @param port The port to listen on
-	 * @param sources The touch devices to try to listen to. One or more of: TouchSource.MOUSE, TouchSource.TUIO_DEVICE, TouchSource.ANDROID, TouchSource.WM_TOUCH, TouchSource.SMART, TouchSource.AUTOMATIC.
-	 */
-	public static void init(
-			PApplet applet, int port, TouchSource... sources){
 		if( applet == null)
 			throw new NullPointerException(
 				"Null applet parameter, pass 'this' to SMT.init() instead of null");
@@ -233,9 +197,7 @@ public class SMT {
 		SMTUtilities.loadMethods( applet.getClass());
 
 		//load default touch bounds
-		SMT.setTouchSourceBoundsSketch( TouchSource.MOUSE,	
-			TouchSource.LEAP, TouchSource.SMART,
-			TouchSource.TUIO_DEVICE, TouchSource.WM_TOUCH);
+		SMT.setTouchSourceBoundsSketch( TouchSource.ANDROID);
 
 		//load touch drawer ( if necessary )
 		if( touchDrawMethod == TouchDraw.TEXTURED)
@@ -251,7 +213,6 @@ public class SMT {
 		picker = new ZonePicker();
 		listener = new AndroidTouchListener();
 		manager = new SMTTouchManager( listener, picker);
-		mainListenerPort = port;
 
 		//connect to android touches
 		connect_android();
@@ -259,6 +220,7 @@ public class SMT {
 		//there's got to be a better way
 		addJVMShutdownHook();
 
+		//jbox2d setup
 		world = new World( new Vec2( 0.0f, 0.0f), true);
 		//top
 		groundBody = createStaticBox( 0, -10.0f, applet.width, 10.f);
@@ -277,9 +239,9 @@ public class SMT {
 	 * Sets the touch fitting method for all touch sources (except mouse) to window mode.
 	 * This fits touches onto the current window's space.
 	 **/
-	public static void setTouchSourceBoundsSketch(){
+	/*public static void setTouchSourceBoundsSketch(){
 		setTouchSourceBoundsSketch( sources_notmouse);
-	}
+	}*/
 	/**
 	 * Sets the touch fitting method for the given touch sources to window mode.
 	 * This fits touches onto the current window's space.
@@ -298,7 +260,6 @@ public class SMT {
 	}
 
 	//other functions
-
 	public static void dlog( String message, Object... args){
 		android.util.Log.d( "SMTAndroid",
 			String.format( message, args));
@@ -392,7 +353,7 @@ public class SMT {
 	}
 
 	// Connection utility methods
-	private static TuioClient openTuioClient( int port){
+	/*private static TuioClient openTuioClient( int port){
 		//try to open connection
 		TuioClient client = new TuioClient( port);
 		client.connect();
@@ -409,7 +370,7 @@ public class SMT {
 	private static void printConnectMessage( String message, int port){
 		if( debug) System.out.printf(
 			"Listening to %s using port %d\n", message, port);
-	}
+	}*/
 
 	/**
 	 * Check that this build of SMT is compatible with the current version of processing.
@@ -428,8 +389,8 @@ public class SMT {
 			System.out.printf(
 				"You are using Processing build %s. This build of SMT requires, at maximum, Processing %s ( build %s ). Either downgrade processing or upgrade SMT. You might find a compatible build of SMT at vialab.science.uoit.ca/smt/download.php. Alternatively, to disable this check, set SMT.pversion_override = true.\n",
 				revision_name, revision_max_name, revision_max_build);
-			return false;}*/
-		//all's good :)
+			return false;}
+		//all's good :)*/
 		return true;
 	}
 
@@ -847,7 +808,7 @@ public class SMT {
 	 * help with debugging
 	 */
 	public static void drawDebugTouchPoints(){
-		renderer.pushStyle();
+		/*renderer.pushStyle();
 		for (Touch touch : SMTTouchManager.currentTouchState){
 			renderer.fill(255);
 			if (touch.isJointCursor)
@@ -888,7 +849,7 @@ public class SMT {
 				}
 			}
 		}
-		renderer.popStyle();
+		renderer.popStyle();*/
 	}
 
 	/** Adds a zone(s) to the sketch/application.
@@ -1054,8 +1015,7 @@ public class SMT {
 
 		switch( touchDrawMethod){
 			case CUSTOM:
-				customTouchDrawer.draw( 
-					SMTTouchManager.currentTouchState, renderer);
+				customTouchDrawer.draw( manager.getTouches(), renderer);
 				break;
 			case DEBUG:
 				drawDebugTouchPoints();
@@ -1064,8 +1024,7 @@ public class SMT {
 				drawSmoothTouchPoints();
 				break;
 			case TEXTURED:
-				texturedTouchDrawer.draw( 
-					SMTTouchManager.currentTouchState, renderer);
+				texturedTouchDrawer.draw( manager.getTouches(), renderer);
 				break;
 			case NONE:
 				break;
@@ -1090,9 +1049,9 @@ public class SMT {
 	 * 
 	 * @return Vector<TuioObject>
 	 */
-	public static Vector<TuioObject> getTuioObjects(){
+	/*public static Vector<TuioObject> getTuioObjects(){
 		return new Vector<TuioObject>(listener.getTuioObjects());
-	}
+	}*/
 
 	/**
 	 * @return An array containing all touches that are currently NOT assigned
@@ -1139,7 +1098,7 @@ public class SMT {
 	 * @return Collection<Touch>
 	 */
 	public static Collection<Touch> getTouchCollection(){
-		return getTouchMap().values();
+		return manager.getTouches();
 	}
 
 	/**
@@ -1148,7 +1107,7 @@ public class SMT {
 	 * @return Touch[] containing all touches that are currently mapped
 	 */
 	public static Touch[] getTouches(){
-		return getTouchMap().values().toArray( new Touch[0]);
+		return manager.getTouches().toArray( new Touch[0]);
 	}
 
 	/**
@@ -1165,9 +1124,9 @@ public class SMT {
 	/**
 	 * @return A Map<Long,Touch> indexing all touches by their session_id's
 	 */
-	public static Map<Long, Touch> getTouchMap(){
+	/*public static Map<Long, Touch> getTouchMap(){
 		return SMTTouchManager.currentTouchState.idToTouches;
-	}
+	}*/
 
 	// /**
 	// * This method returns all the current touches that are not actively
@@ -1225,9 +1184,9 @@ public class SMT {
 	 *            long - Session ID of the TuioObject
 	 * @return TuioObject
 	 */
-	public static TuioObject getTuioObject(long s_id){
+	/*public static TuioObject getTuioObject(long s_id){
 		return listener.getTuioObject(s_id);
-	}
+	}*/
 
 	/**
 	 * Returns the Touch(TuioCursor) associated with the session ID
@@ -1236,9 +1195,9 @@ public class SMT {
 	 *            long - Session ID of the Touch(TuioCursor)
 	 * @return TuioCursor
 	 */
-	public static Touch getTouch(long s_id){
+	/*public static Touch getTouch(long s_id){
 		return SMTTouchManager.currentTouchState.getById(s_id);
-	}
+	}*/
 
 	/** wtf is this for...
 	 * @param s_id
@@ -1298,17 +1257,6 @@ public class SMT {
 		// TODO: provide some default assignment of touches
 		zonedraw_i = 0;
 		manager.handleTouches();
-
-		if( mtt != null){
-			//update touches from mouseToTUIO joint cursors as they are a special case and need to be shown to user
-			for( Touch touch : SMTTouchManager.currentTouchState)
-				touch.isJointCursor = false;
-			for( Integer id : mtt.getJointCursors()){
-				Touch touch = SMTTouchManager.currentTouchState.getById( id);
-				if( touch != null)
-					touch.isJointCursor = true;
-			}
-		}
 
 		renderer.flush();
 		if( getTouches().length > 0)
