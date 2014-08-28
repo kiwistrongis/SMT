@@ -24,7 +24,7 @@ class SMTTouchManager {
 	private Vector<Touch> touches_new;
 	private Vector<Touch> touches_moved;
 	private Vector<Touch> touches_dead;
-	private boolean debug = true;
+	private boolean debug = false;
 
 	public SMTTouchManager( AndroidTouchListener listener, ZonePicker picker){
 		this.listener = listener;
@@ -50,12 +50,12 @@ class SMTTouchManager {
 		//parse through events so far
 		parseListenerQueue();
 		//work through the various touch queues
-		handleTouchesUp();
-		handleTouchesMoved();
-		handleTouchesDown();
-		//touches_new.clear();
-		//touches_moved.clear();
-		//touches_dead.clear();
+		//handleTouchesUp();
+		//handleTouchesMoved();
+		//handleTouchesDown();
+		touches_new.clear();
+		touches_moved.clear();
+		touches_dead.clear();
 	}
 
 	protected void parseListenerQueue(){

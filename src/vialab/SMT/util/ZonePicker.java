@@ -167,7 +167,7 @@ public class ZonePicker {
 		SMT.getRootZone().invokePickDraw();
 		renderer.endDraw();
 		renderer.flush();
-		renderer.loadPixels();
+		//renderer.loadPixels();
 		// If fast picking disabled, use loadPixels() which is really slow (max 70 fps on a high end card vs 200+ fps with readPixels) as a backup.
 		/*PGL pgl = renderer.beginPGL();
 		if ( ! SMT.fastPickingEnabled() || pgl == null)

@@ -105,8 +105,7 @@ public class TexturedTouchDrawer
 		Touch[] deadTouches_array = deadTouches.toArray( new Touch[0]);
 		for( Touch touch : deadTouches_array){
 			//get how long this touch has been dead
-			long deadtime_millis = currentTime -
-				touch.deathTime.getTotalMilliseconds();
+			long deadtime_millis = currentTime - touch.deathTime;
 			//interpolate onto the animation domain
 			float ani_step = (float) deadtime_millis / death_duration;
 			//draw the touch
@@ -196,7 +195,7 @@ public class TexturedTouchDrawer
 	private Vector<TuioPoint> selectPoints( Touch touch, long currentTime){
 		//result points
 		Vector<TuioPoint> points = new Vector<TuioPoint>();
-		Vector<TuioPoint> touch_path = touch.getTuioPath();
+		Vector<TuioPoint> touch_path = null;
 		//for every point along the path
 		TuioPoint previous = null;
 		for( int i = touch_path.size() - 1; i >= 0; i--){

@@ -70,7 +70,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	@Deprecated
 	public int height, width;
 	/** The dimensions of the zone */
-	/** The half-dimensions of the zone */
+	protected Dimension dimension;
 
 	//The zone's transformation matrix
 	protected PMatrix3D matrix = new PMatrix3D();
@@ -264,6 +264,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		this.dimension = new Dimension( width, height);
 		this.renderer_name = renderer;
 		this.rntRadius = Math.min( width, height) / 4;
 
@@ -1803,7 +1804,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 			this.inGeo = null;
 		}
 		else
-			refreshResolution();
+			initExtraGraphics();
 	}
 
 	/**
@@ -1823,7 +1824,9 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * This method does nothing to normal, 'direct', zones.
 	 */
 	public void refreshResolution(){
-		throw new RemovedFeatureException();
+		//get needed info
+		Dimension screen_size = this.getScreenSize();
+		setResolution( screen_size);
 	}
 
 	/**
@@ -1831,14 +1834,14 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 *
 	 * This method does nothing to normal, 'direct', zones.
 	 */
-	public void setResolution( int desired_width, int desired_height){
+	public void setResolution( Dimension desired_size){
 		//don't bother if we're direct
 		if( direct) return;
 
 		//create offscreen graphics context
 		PGraphics extra_object = applet.createGraphics(
-			desired_width,
-			desired_height,
+			desired_size.width,
+			desired_size.height,
 			this.renderer_name);
 		//check the class
 		if( ! ( extra_object instanceof PGraphics3D))
@@ -1851,8 +1854,8 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 			extra_matrix = new PMatrix3D();
 		else
 			extra_matrix.reset();
-		float scale_x = (float) desired_width / this.width;
-		float scale_y = (float) desired_height / this.height;
+		float scale_x = (float) desired_size.width / this.width;
+		float scale_y = (float) desired_size.height / this.height;
 		extra_matrix.scale( scale_x, scale_y);
 		//finish up
 		setModified();
@@ -1862,7 +1865,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * Resizes the extra_graphics object to match the current dimensions of the Zone
 	 */
 	protected void initExtraGraphics(){
-		setResolution( this.width, this.height);
+		setResolution( this.dimension);
 	}
 
 	/**
@@ -2216,6 +2219,8 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 		super.setSize( width, height);
 		this.width = width;
 		this.height = height;
+		this.dimension.width = width;
+		this.dimension.height = height;
 	}
 
 	/**

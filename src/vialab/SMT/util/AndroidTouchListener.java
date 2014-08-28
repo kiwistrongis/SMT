@@ -13,7 +13,7 @@ import vialab.SMT.*;
 public class AndroidTouchListener implements View.OnTouchListener {
 	//fields
 	public Vector<MotionEvent> event_queue;
-	public boolean debug = true;
+	public boolean debug = false;
 
 	//constructor
 	public AndroidTouchListener(){

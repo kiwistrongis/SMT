@@ -27,7 +27,6 @@ class_files = \
 	bin/vialab/SMT/SMTTuioListener.class \
 	bin/vialab/SMT/SMTUtilities.class \
 	bin/vialab/SMT/TabZone.class \
-	bin/vialab/SMT/TexturedTouchDrawer.class \
 	bin/vialab/SMT/TextureZone.class \
 	bin/vialab/SMT/Touch.class \
 	bin/vialab/SMT/TouchClient.class \
@@ -35,7 +34,6 @@ class_files = \
 	bin/vialab/SMT/TouchDrawer.class \
 	bin/vialab/SMT/TouchPair.class \
 	bin/vialab/SMT/TouchSource.class \
-	bin/vialab/SMT/TouchState.class \
 	bin/vialab/SMT/TuioConnectionException.class \
 	bin/vialab/SMT/util/ProxyTuioListener.class \
 	bin/vialab/SMT/util/AndroidTouchListener.class \
@@ -67,9 +65,7 @@ source_files = \
 	src/vialab/SMT/PatternUnlockZone.java \
 	src/vialab/SMT/PieMenuZone.java \
 	src/vialab/SMT/renderer/P3DDSRenderer.java \
-	src/vialab/SMT/renderer/PGLDSRenderer.java \
 	src/vialab/SMT/renderer/PGraphics3DDelegate.java \
-	src/vialab/SMT/renderer/PGraphicsOpenGLDelegate.java \
 	src/vialab/SMT/ShapeZone.java \
 	src/vialab/SMT/Simulation.java \
 	src/vialab/SMT/SlideRevealZone.java \
@@ -78,24 +74,8 @@ source_files = \
 	src/vialab/SMT/SMTTouchManager.java \
 	src/vialab/SMT/SMTTuioListener.java \
 	src/vialab/SMT/SMTUtilities.java \
-	src/vialab/SMT/swipekeyboard/AnchorZone.java \
-	src/vialab/SMT/swipekeyboard/ArrowKeysLayout.java \
-	src/vialab/SMT/swipekeyboard/CondensedLayout.java \
-	src/vialab/SMT/swipekeyboard/DebugSwipeKeyboardListener.java \
-	src/vialab/SMT/swipekeyboard/DefaultSwipeResolver.java \
-	src/vialab/SMT/swipekeyboard/ExtendedLayout.java \
-	src/vialab/SMT/swipekeyboard/KeyZone.java \
-	src/vialab/SMT/swipekeyboard/ModifierKeyZone.java \
-	src/vialab/SMT/swipekeyboard/SwipeKeyboardEvent.java \
-	src/vialab/SMT/swipekeyboard/SwipeKeyboardLayout.java \
-	src/vialab/SMT/swipekeyboard/SwipeKeyboardListener.java \
-	src/vialab/SMT/swipekeyboard/SwipeKeyEvent.java \
-	src/vialab/SMT/swipekeyboard/SwipeKeyListener.java \
-	src/vialab/SMT/swipekeyboard/SwipeKeyZone.java \
-	src/vialab/SMT/swipekeyboard/SwipeResolver.java \
 	src/vialab/SMT/SwipeKeyboard.java \
 	src/vialab/SMT/TabZone.java \
-	src/vialab/SMT/TexturedTouchDrawer.java \
 	src/vialab/SMT/TextureZone.java \
 	src/vialab/SMT/TextZone.java \
 	src/vialab/SMT/Touch.java \
@@ -104,7 +84,6 @@ source_files = \
 	src/vialab/SMT/TouchDrawer.java \
 	src/vialab/SMT/TouchPair.java \
 	src/vialab/SMT/TouchSource.java \
-	src/vialab/SMT/TouchState.java \
 	src/vialab/SMT/TuioConnectionException.java \
 	src/vialab/SMT/util/ProxyTuioListener.java \
 	src/vialab/SMT/util/AndroidTouchListener.java \

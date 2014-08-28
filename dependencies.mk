@@ -120,7 +120,6 @@ bin/vialab/SMT/SMT.class: \
 	bin/vialab/SMT/TexturedTouchDrawer.class \
 	bin/vialab/SMT/TouchDraw.class \
 	bin/vialab/SMT/TouchSource.class \
-	bin/vialab/SMT/TouchState.class \
 	bin/vialab/SMT/util/AndroidTouchListener.class \
 	bin/vialab/SMT/util/ProxyTuioListener.class \
 	bin/vialab/SMT/util/SketchTouchBinder.class \
@@ -129,18 +128,11 @@ bin/vialab/SMT/SMT.class: \
 	bin/vialab/SMT/Zone.class
 
 bin/vialab/SMT/SMTTouchManager.class: \
-	bin/vialab/SMT/SMTTuioListener.class \
-	bin/vialab/SMT/SMTUtilities.class \
 	bin/vialab/SMT/util/AndroidTouchListener.class \
 	bin/vialab/SMT/util/ZonePicker.class \
-	bin/vialab/SMT/TouchState.class \
 	bin/vialab/SMT/Zone.class
 
-bin/vialab/SMT/SMTTuioListener.class: \
-	bin/vialab/SMT/TouchState.class
-
-bin/vialab/SMT/SMTUtilities.class: \
-	bin/vialab/SMT/Zone.class
+bin/vialab/SMT/SMTUtilities.class:
 
 bin/vialab/SMT/SwipeKeyboard.class: \
 	bin/vialab/SMT/swipekeyboard/AnchorZone.class \
@@ -184,8 +176,6 @@ bin/vialab/SMT/TouchDrawer.class:
 bin/vialab/SMT/TouchPair.class:
 
 bin/vialab/SMT/TouchSource.class:
-
-bin/vialab/SMT/TouchState.class:
 
 bin/vialab/SMT/ViewportZone.class: \
 	bin/vialab/SMT/Zone.class

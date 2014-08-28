@@ -437,7 +437,7 @@ public final class SMTUtilities {
 	 *            TuioTime of the last update
 	 * @return TuioCursor
 	 */
-	public static Touch getLastTouchAtTime(TuioCursor cursor, TuioTime lastUpdate) {
+	/*public static Touch getLastTouchAtTime(TuioCursor cursor, TuioTime lastUpdate) {
 		Vector<TuioPoint> path = new Vector<TuioPoint>(cursor.getPath());
 
 		Collections.reverse(path);
@@ -455,7 +455,7 @@ public final class SMTUtilities {
 			}
 		}
 		return null;
-	}
+	}*/
 
 	/**
 	 * This calls the main method in the PApplet

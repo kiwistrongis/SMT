@@ -101,7 +101,7 @@ test-tutorial-tsbounds: build
 
 # prototypes
 test-android: build
-	pshell -a tests/android
+	pshell -a tests/test_android
 test-ripple: build
 	pshell tests/ripple
 test-viewport: build
