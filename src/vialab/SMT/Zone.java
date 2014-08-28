@@ -125,11 +125,11 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 
 	// A LinkedHashMap will allow insertion order to be maintained.  A synchronised one will prevent concurrent modification (which can happen pretty easily with the draw loop + touch event handling).
 	/** All of the currently active touches for this zone */
-	private Map<Long, Touch> activeTouches =
+	private Map<Integer, Touch> activeTouches =
 		Collections.synchronizedMap(
-			new LinkedHashMap<Long, Touch>());
+			new LinkedHashMap<Integer, Touch>());
 	protected CopyOnWriteArrayList<Zone> children = new CopyOnWriteArrayList<Zone>();
-	protected TuioTime lastUpdate = TuioTime.getSessionTime();
+	protected Long lastUpdate = 0l;
 	protected float rntRadius;
 	protected String renderer_name = null;
 
@@ -1160,8 +1160,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 		translate( delta.x, delta.y);
 
 		//reset last update time
-		lastUpdate = maxTuioTime(
-			lastUpdate, first.currentTime);
+		lastUpdate = maxTime( lastUpdate, first.currentTime);
 	}
 
 	/**
@@ -1221,8 +1220,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 				translate_y ? dt.y : 0, 0);
 
 			//update time
-			lastUpdate = maxTuioTime(
-				lastUpdate, first.currentTime);
+			lastUpdate = maxTime( lastUpdate, first.currentTime);
 
 			//we're done
 			return;
@@ -1284,7 +1282,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 					translate_y ? - t01.y : 0, 0);
 
 			//update time
-			lastUpdate = maxTuioTime(
+			lastUpdate = maxTime(
 				lastUpdate, first.currentTime, second.currentTime);
 		}
 	}
@@ -1480,7 +1478,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 */
 	public void assign( Iterable<? extends Touch> touches){
 		for( Touch touch : touches){
-			activeTouches.put( touch.sessionID, touch);
+			activeTouches.put( touch.id, touch);
 			touch.assignZone( this);
 		}
 	}
@@ -1490,7 +1488,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * @param touch
 	 */
 	public void unassign( Touch touch){
-		unassign( touch.sessionID);
+		unassign( touch.id);
 	}
 
 	/**
@@ -1498,14 +1496,14 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * removing it from activeTouches.
 	 * @param sessionID
 	 */
-	public void unassign( long sessionID){
-		Touch t = activeTouches.get(sessionID);
+	public void unassign( int id){
+		Touch touch = activeTouches.get( id);
 		// only removes if it exists in the touch mapping
-		if (t != null){
-			activeTouches.remove(sessionID);
-			t.unassignZone(this);
+		if( touch != null){
+			activeTouches.remove( id);
+			touch.unassignZone( this);
 			// at unassign if we have a mJoint destroy it
-			if (mJoint != null){
+			if( mJoint != null){
 				SMT.world.destroyJoint(mJoint);
 				mJoint = null;
 			}
@@ -1516,14 +1514,14 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * Unassigns all Touch objects from this zone, clearing activeTouches.
 	 */
 	public void unassignAll(){
-		long[] touchids = new long[activeTouches.keySet().size()];
+		int[] touchids = new int[activeTouches.keySet().size()];
 		int i = 0;
-		for (long id : activeTouches.keySet()){
+		for (int id : activeTouches.keySet()){
 			touchids[i] = id;
 			i++;
 		}
 
-		for (long id : touchids)
+		for (int id : touchids)
 			unassign(id);
 	}
 
@@ -1532,7 +1530,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * @return Whether the given touch is assigned to this zone
 	 */
 	public boolean isAssigned( Touch touch){
-		return isAssigned( touch.sessionID);
+		return isAssigned( touch.id);
 	}
 
 	/**
@@ -1540,7 +1538,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * @return Whether the Touch corresponding to the given id is assigned to
 	 * this zone
 	 */
-	public boolean isAssigned( long id){
+	public boolean isAssigned( int id){
 		return activeTouches.containsKey( id);
 	}
 
@@ -1971,14 +1969,14 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * Get the IDs of all the touches currently assigned to this zone.
 	 * @return A set of longs containing the long id's of the zone's touches
 	 */
-	public Set<Long> getIds(){
+	public Set<Integer> getIds(){
 		return Collections.unmodifiableSet(activeTouches.keySet());
 	}
 
 	/**
-	 * @return A Map<Long, Touch> which maps each touch id to the touch for the zones active touches
+	 * @return A Map<Integer, Touch> which maps each touch id to the touch for the zones active touches
 	 */
-	public Map<Long, Touch> getTouchMap(){
+	public Map<Integer, Touch> getTouchMap(){
 		return Collections.unmodifiableMap(activeTouches);
 	}
 
@@ -2377,30 +2375,26 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 		return fromZoneVector( new PVector(0, 0));
 	}
 
-	protected TuioTime maxTime(Iterable<Touch> touches){
-		ArrayList<TuioTime> times = new ArrayList<TuioTime>();
-		for (Touch t : touches){
-			if (t != null){
-				times.add(t.currentTime);
-			}
-		}
-		return Collections.max(times, SMTUtilities.tuioTimeComparator);
+	protected Long maxTime(Iterable<Touch> touches){
+		ArrayList<Long> times = new ArrayList<Long>();
+		for( Touch touch : touches)
+			if( touch != null)
+				times.add( touch.currentTime);
+		return Collections.max( times);
 	}
 
-	protected TuioTime maxTime(TouchPair... pairs){
-		ArrayList<Touch> touches = new ArrayList<Touch>(pairs.length * 2);
-		for (TouchPair pair : pairs){
-			touches.add(pair.from);
-			touches.add(pair.to);
+	protected Long maxTime(TouchPair... pairs){
+		ArrayList<Touch> touches = new ArrayList<Touch>( pairs.length * 2);
+		for( TouchPair pair : pairs){
+			touches.add( pair.from);
+			touches.add( pair.to);
 		}
-		return maxTime(touches);
+		return maxTime( touches);
 	}
 
-	public static TuioTime maxTuioTime( TuioTime... times){
+	public static Long maxTime( Long... times){
 		return times.length != 0 ?
-			Collections.max(
-				Arrays.asList( times),
-				SMTUtilities.tuioTimeComparator) :
+			Collections.max( Arrays.asList( times)) :
 			null;
 	}
 
@@ -2436,9 +2430,9 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 *         Zone, each TouchPair is the Touch at its current state, and its
 	 *         previous state
 	 */
-	protected List<TouchPair> getTouchPairs(){
+	/*protected List<TouchPair> getTouchPairs(){
 		return getTouchPairs(activeTouches.size());
-	}
+	}*/
 
 	/**
 	 * This takes the touches currently assigned to the Zone and converts them
@@ -2452,7 +2446,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 * Zone, each TouchPair is the Touch at its current state, and its
 	 * previous state
 	 */
-	protected List<TouchPair> getTouchPairs(int size){
+	/*protected List<TouchPair> getTouchPairs(int size){
 		ArrayList<TouchPair> pairs = new ArrayList<TouchPair>(size);
 		for (int i = 0; i < size; i++){
 			Touch touch = getActiveTouch(i);
@@ -2467,7 +2461,7 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 			}
 		}
 		return pairs;
-	}
+	}*/
 
 	/**
 	 * Clones the zone and all child zones

@@ -212,10 +212,8 @@ public class SMT {
 
 		picker = new ZonePicker();
 		listener = new AndroidTouchListener();
+		applet_surfaceView.setOnTouchListener( listener);
 		manager = new SMTTouchManager( listener, picker);
-
-		//connect to android touches
-		connect_android();
 
 		//there's got to be a better way
 		addJVMShutdownHook();
@@ -231,8 +229,6 @@ public class SMT {
 		//right
 		createStaticBox( applet.width + 10.0f, 0, 10.0f, applet.height);
 	}
-
-	private static void connect_android(){}
 
 	// window binding method
 	/**

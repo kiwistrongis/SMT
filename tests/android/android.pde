@@ -11,16 +11,20 @@ public int sketchHeight(){
 	return displayHeight;}
 
 //variables
-//int sketch_orientation = LANDSCAPE;
-int sketch_orientation = PORTRAIT;
+int sketch_orientation = LANDSCAPE;
+//int sketch_orientation = PORTRAIT;
 
 void setup(){
 	orientation( sketch_orientation);
 	SMT.init( this);
 
+	SMT.dlog( "hello :)");
 	SMT.add( new Zone( "Asdf", 220, 10, 100, 100));
 }
 
+void pre(){
+	SMT.dlog( "test");
+}
 void draw(){
 	background( 25);
 	drawFrameRate();
@@ -59,13 +63,9 @@ public void drawTouchInfo(){
 	for( vialab.SMT.Touch touch : SMT.getTouches()){
 		String touch_text = String.format(
 			"id: %d\n" +
-				"source: %s\n" +
-				"raw: %.2f, %.2f\n" +
 				"fitted: %.2f, %.2f\n" +
 				"rounded: %d, %d",
-			touch.cursorID,
-			touch.getTouchSource(),
-			touch.getRawX(), touch.getRawY(),
+			touch.id,
 			touch.getX(), touch.getY(),
 			touch.x, touch.y);
 		

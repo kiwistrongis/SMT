@@ -123,7 +123,8 @@ public class ZonePicker {
 		if( x < 0)
 			x = 0;
 
-		PGL pgl = picking_context.beginPGL();
+		int pixel = picking_context.pixels[ x + y * picking_context.width];
+		/*PGL pgl = picking_context.beginPGL();
 		int pixel;
 		// force fallback until 2.0b10
 		if( ! SMT.fastPickingEnabled() || pgl == null)
@@ -137,7 +138,7 @@ public class ZonePicker {
 				buffer);
 			pixel = buffer.getInt();
 		}
-		picking_context.endPGL();
+		picking_context.endPGL();*/
 
 		if( zoneMap.containsKey( pixel)){
 			// if mapped it is either a Zone or null (background)
@@ -166,6 +167,7 @@ public class ZonePicker {
 		SMT.getRootZone().invokePickDraw();
 		renderer.endDraw();
 		renderer.flush();
+		renderer.loadPixels();
 		// If fast picking disabled, use loadPixels() which is really slow (max 70 fps on a high end card vs 200+ fps with readPixels) as a backup.
 		/*PGL pgl = renderer.beginPGL();
 		if ( ! SMT.fastPickingEnabled() || pgl == null)

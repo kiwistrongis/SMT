@@ -11,8 +11,7 @@ import processing.core.*;
 import TUIO.*;
 
 //local imports
-import vialab.SMT.awt.Color;
-import vialab.SMT.awt.Point;
+import vialab.SMT.awt.*;
 import vialab.SMT.event.*;
 import vialab.SMT.util.*;
 
@@ -24,14 +23,8 @@ import vialab.SMT.util.*;
 public class Touch {
 
 	//Public Fields
-	/** The underlying cursor object for this touch */
-	private TuioCursor cursor;
 	/** The individual cursor ID number that is assigned to each TuioCursor. */
-	public int cursorID;
-	/** Reflects the current state of the TuioComponent. */
-	public int state;
-	/** The unique session ID number that is assigned to each TUIO object or cursor. */
-	public long sessionID;
+	public int id;
 	/** The X coordinate in pixels relative to the PApplet screen width. */
 	public int x;
 	/** The Y coordinate in pixels relative to the PApplet screen height. */
@@ -46,19 +39,19 @@ public class Touch {
 	public float motionAcceleration;
 
 	/** The start time of the TuioCursor/Touch */
-	public TuioTime startTime;
+	public Long startTime;
 	/** The current time of the TuioCursor/Touch */
-	public TuioTime currentTime;
+	public Long currentTime;
 	/** The time at which the TuioCursor/Touch was assigned*/
-	public TuioTime assignTime;
+	public Long assignTime;
 	/** The time at which the TuioCursor/Touch was unassigned */
-	public TuioTime unassignTime;
+	public Long unassignTime;
 	/** The time at which the TuioCursor/Touch was unassigned */
-	public TuioTime deathTime;
+	public Long deathTime;
 	/**
 	 * A Vector of TuioPoints containing all the previous positions of the TUIO component.
 	 */
-	public Vector<TuioPoint> path;
+	public Vector<PathPoint> path;
 
 	/**
 	 * True means the touch is currently down on the screen, false means that the touch has been lifted up.
@@ -66,16 +59,15 @@ public class Touch {
 	public boolean isDown;
 
 	//Private Fields
-	private TuioTime prevUpdateTime;
+	private Long prevUpdateTime;
 	boolean isJointCursor = false;
 	private CopyOnWriteArrayList<Zone> assignedZones =
 		new CopyOnWriteArrayList<Zone>();
 	long originalTimeMillis;
 	long startTimeMillis;
 	private Vector<TouchListener> listeners;
-	private TouchSource source = null;
 	private PVector position = null;
-
+	private TouchSource source = null;
 
 	//colors
 	//touch's tint
@@ -91,7 +83,7 @@ public class Touch {
 	 * 
 	 * @param tuioCursor TuioCursor: The TUIO Cursor
 	 */
-	public Touch( TuioCursor tuioCursor){
+	/*public Touch( TuioCursor tuioCursor){
 		this.cursor = tuioCursor;
 		//if( true) throw new RuntimeException( "one");
 		this.update( tuioCursor);
@@ -102,7 +94,7 @@ public class Touch {
 		unassignTime = null;
 		deathTime = null;
 		listeners = new Vector<TouchListener>();
-	}
+	}*/
 
 	/**
 	 * This constructor takes the provided Session ID, Cursor ID, X and Y
@@ -147,7 +139,7 @@ public class Touch {
 	 * @param xCoord X Coordinate
 	 * @param yCoord Y Coordinate
 	 */
-	public Touch( TuioTime ttime, long sessionID, int cursorID, float xCoord, float yCoord){
+	/*public Touch( TuioTime ttime, long sessionID, int cursorID, float xCoord, float yCoord){
 		cursor = new TuioCursor( ttime, sessionID, cursorID, xCoord, yCoord);
 		//if( true) throw new RuntimeException( "three");
 		this.cursorID = cursor.getCursorID();
@@ -168,6 +160,58 @@ public class Touch {
 		this.unassignTime = null;
 		this.deathTime = null;
 		this.listeners = new Vector<TouchListener>();
+	}*/
+	public Touch( int id, float x, float y, long time){
+		this.id = id;
+		this.source = TouchSource.ANDROID;
+		this.path = new Vector<PathPoint>();
+		//update position
+		this.position = new PVector( x, y);
+		this.x = Math.round( x);
+		this.y = Math.round( y);
+		//add path point
+		this.path.add( new PathPoint( x, y, time));
+		//update other motion vars
+		this.xSpeed = 0;
+		this.ySpeed = 0 ;
+		this.motionSpeed = 0;
+		this.motionAcceleration = 0;
+		//other
+		this.startTime = time;
+		this.startTimeMillis = time;
+		this.originalTimeMillis = time;
+		//private fields
+		this.assignTime = null;
+		this.unassignTime = null;
+		this.deathTime = null;
+		this.listeners = new Vector<TouchListener>();
+	}
+
+	/**
+ 	 * @param cursor TuioCursor to update the Touch with, since Touch extends TuioCursor, it can also take a Touch
+	 */
+	public void update( float x, float y, long time){
+		this.currentTime = new Long( time);
+		//update position
+		this.position = new PVector( x, y);
+		this.x = Math.round( x);
+		this.y = Math.round( y);
+		//add path point
+		this.path.add( new PathPoint( x, y, time));
+		//update other motion vars
+		/*this.velocity = this.getVelocity();
+		this.acceleration = this.getAcceleration();
+		this.xSpeed = Math.abs( velocity.x);
+		this.ySpeed = Math.abs( velocity.y);
+		this.motionSpeed = velocity.mag();
+		this.motionAcceleration = acceleration.mag();*/
+	}
+
+	/**
+	 * Update this touch's previous time variable
+	 **/
+	public void updateTime(){
+		prevUpdateTime = currentTime;
 	}
 
 	/**
@@ -185,28 +229,6 @@ public class Touch {
 	}
 
 	/**
-	 * @param cursor TuioCursor to update the Touch with, since Touch extends TuioCursor, it can also take a Touch
-	 */
-	public void update( TuioCursor cursor){
-		prevUpdateTime = currentTime;
-
-		this.cursor = cursor;
-		this.cursorID = cursor.getCursorID();
-		this.startTime = cursor.getStartTime();
-		this.currentTime = cursor.getTuioTime();
-		this.xSpeed = cursor.getXSpeed();
-		this.ySpeed = cursor.getYSpeed();
-		this.motionSpeed = cursor.getMotionSpeed();
-		this.motionAcceleration = cursor.getMotionAccel();
-		this.path = cursor.getPath();
-		this.sessionID = cursor.getSessionID();
-		this.state = cursor.getTuioState();
-		this.position = this.getBoundPosition();
-		this.x = Math.round( position.x);
-		this.y = Math.round( position.y);
-	}
-
-	/**
 	 * Gets a Point on the Touch's path history
 	 * 
 	 * @param index The index of the point on the Touch's path (0 is first Point, 
@@ -217,13 +239,10 @@ public class Touch {
 	public Point getPointOnPath(int index){
 		if (index < 0 || index >= path.size())
 			return null;
-	
-		TuioPoint tuioPoint = path.get( index);
-		PVector boundPoint = getTouchBinder().bind(
-			tuioPoint.getX(), tuioPoint.getY());
+		PathPoint point = path.get( index);
 		return new Point(
-			Math.round( boundPoint.x),
-			Math.round( boundPoint.y));
+			Math.round( point.x),
+			Math.round( point.y));
 	}
 
 	/**
@@ -238,13 +257,13 @@ public class Touch {
 	 * @param zone
 	 *            The Zone to assign this Touch to
 	 */
-	public void assignZone(Zone zone){
+	public void assignZone( Zone zone){
 		if (zone != null){
 			assignedZones.add(zone);
 			if (!zone.isAssigned(this))
 				zone.assign(this);
-			this.startTimeMillis = System.currentTimeMillis();
-			assignTime = currentTime.getSessionTime();
+			this.startTimeMillis = currentTime;
+			this.assignTime = currentTime;
 		}
 	}
 
@@ -252,12 +271,12 @@ public class Touch {
 	 * @param zone
 	 *            The Zone to unassign this Touch from
 	 */
-	public void unassignZone(Zone zone){
-		if (zone != null){
-			assignedZones.remove(zone);
-			zone.unassign( this.sessionID);
+	public void unassignZone( Zone zone){
+		if( zone != null){
+			assignedZones.remove( zone);
+			zone.unassign( this.id);
 			this.startTimeMillis = this.originalTimeMillis;
-			unassignTime= currentTime.getSessionTime();
+			this.unassignTime = currentTime;
 		}
 	}
 
@@ -279,16 +298,8 @@ public class Touch {
 	}
 
 	//accessor methods
-	
-	public TuioCursor getTuioCursor(){
-		return cursor;
-	}
-	public TuioTime getTuioTime(){
-		return cursor.getTuioTime();
-	}
-	
-	public long getSessionID(){
-		return cursor.getSessionID();
+	public long getID(){
+		return id;
 	}
 
 	public float getX(){
@@ -299,38 +310,20 @@ public class Touch {
 		return position.y;
 	}
 
-	//raw gets
-	public float getRawX(){
-		return cursor.getX();
-	}
-
-	public float getRawY(){
-		return cursor.getY();
-	}
-
 	public PVector getPositionVector(){
 		return position;
 	}
 
-	public PVector getPositionAtTime( TuioTime time){
-		Vector<TuioPoint> path = cursor.getPath();
-		long time_millis = time.getTotalMilliseconds();
+	public PVector getPositionAtTime( long time){
 		//search through the path in reverse order
-		for( int i = path.size() - 1; i >=0; i--){
+		for( int i = path.size() - 1; i >= 0; i--){
 			//get the time at that point
-			TuioPoint point = path.get( i);
-			long point_millis = point.getTuioTime().getTotalMilliseconds();
+			PathPoint point = path.get( i);
 			//return if the point was before the specified time
-			if( point_millis <= time_millis)
-				return getTouchBinder().bind(
-					point.getX(), point.getY());
+			if( point.getTime() <= time)
+				return new PVector( point.getX(), point.getY());
 		}
 		return null;
-	}
-	public PVector getBoundPosition(){
-		PVector position = getTouchBinder().bind(
-			this.getRawX(), this.getRawY());
-		return position;
 	}
 	
 	/**
@@ -350,24 +343,11 @@ public class Touch {
 	}
 
 	public TouchSource getTouchSource(){
-		if( source == null){
-			// bottom 48 bits of sessionID are used for actual IDs, top 16 bits for
-			// partitioning by port, 0th partition/non partitioned will be used only
-			// by the main tuiolistener, all others use the port number for the
-			// partition index, and so can be used to find the port, and so the
-			// device it came from
-			int portbits = (int) ( sessionID >> 48);
-			int port = ( portbits != 0) ?
-				portbits : SMT.mainListenerPort;
-			//System.out.printf( "port: %d\n", port);
-			source = SMT.deviceMap.get( port);
-		}
-		return source;
+		return this.source;
 	}
 
 	public TouchBinder getTouchBinder(){
-		return SMT.getTouchBinder(
-			this.getTouchSource());
+		return SMT.getTouchBinder( this.source);
 	}
 
 	/**
@@ -376,19 +356,9 @@ public class Touch {
 	 */
 	public PVector[] getPath(){
 		Vector<PVector> points = new Vector<PVector>();
-		TouchBinder binder = this.getTouchBinder();
-		for( TuioPoint point : this.getTuioPath())
-			points.add(
-				binder.bind(
-					point.getX(), point.getY()));
+		for( PathPoint point : path)
+			points.add( new PVector( point.getX(), point.getY()));
 		return points.toArray( new PVector[ points.size()]);
-	}
-	/**
-	 * Get the raw data path points
-	 * @return [description]
-	 */
-	public Vector<TuioPoint> getTuioPath(){
-		return cursor.getPath();
 	}
 	/**
 	 * @return All the points on the path
@@ -403,16 +373,16 @@ public class Touch {
 	/**
 	 * @return All the points on the path since the previous update
 	 */
-	public Point[] getNewPathPoints(){
+	/*public Point[] getNewPathPoints(){
 		return getNewPathPoints(false);
-	}
+	}*/
 
 	/**
 	 * @param join
 	 *            Whether to start at the previous frame end point
 	 * @return All the points on the path since the previous update
 	 */
-	public Point[] getNewPathPoints( boolean join){
+	/*public Point[] getNewPathPoints( boolean join){
 		Vector<Point> points = new Vector<Point>();
 		for( int i = path.size() - 1; i >= 0; i--){
 			TuioPoint tuioPoint = path.get( i);
@@ -430,22 +400,25 @@ public class Touch {
 			points.add( getPointOnPath( i));
 		}
 		return points.toArray(new Point[points.size()]);
-	}
+	}*/
 
 	//event invocation methods
 	public void invokeTouchDownEvent(){
-		TouchEvent event = new TouchEvent( this, TouchEvent.TouchType.DOWN, this);
+		TouchEvent event = new TouchEvent(
+			this, TouchEvent.TouchType.DOWN, this);
 		for( TouchListener listener : listeners)
 			listener.handleTouchDown( event);
 	}
 	public void invokeTouchUpEvent(){
-		TouchEvent event = new TouchEvent( this, TouchEvent.TouchType.UP, this);
+		TouchEvent event = new TouchEvent(
+			this, TouchEvent.TouchType.UP, this);
 		for( TouchListener listener : listeners)
 			listener.handleTouchUp( event);
-		deathTime = currentTime.getSessionTime();
+		deathTime = currentTime;
 	}
 	public void invokeTouchMovedEvent(){
-		TouchEvent event = new TouchEvent( this, TouchEvent.TouchType.MOVED, this);
+		TouchEvent event = new TouchEvent(
+			this, TouchEvent.TouchType.MOVED, this);
 		for( TouchListener listener : listeners)
 			listener.handleTouchMoved( event);
 	}
@@ -498,5 +471,30 @@ public class Touch {
 	 */
 	public Color getTrailTint(){
 		return trail_tint;
+	}
+
+	public class PathPoint {
+		//fields
+		private float x, y;
+		private long time;
+		//constructor
+		public PathPoint( float x, float y, long time){
+			this.x = x;
+			this.y = y;
+			this.time = time;
+		}
+		//accessors
+		public float getX(){
+			return this.x;
+		}
+		public float getY(){
+			return this.y;
+		}
+		public PVector getPosition(){
+			return new PVector( x, y);
+		}
+		public long getTime(){
+			return this.time;
+		}
 	}
 }
