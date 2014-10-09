@@ -13,6 +13,7 @@ public int sketchHeight(){
 //variables
 int sketch_orientation = LANDSCAPE;
 //int sketch_orientation = PORTRAIT;
+boolean draw_touchtext = false;
 
 //zones
 Zone frame;
@@ -88,10 +89,12 @@ public void drawTouchInfo(){
 		stroke( 240, 240, 240, 180);
 		strokeWeight( 8);
 		ellipse( touch.getX(), touch.getY(), 50, 50);
-		fill( 240, 240, 240, 180);
-		textAlign( LEFT, TOP);
-		textSize( 30);
-		text( touch_text, touch.x + 50, touch.y - 20);
+		if( draw_touchtext){
+			fill( 240, 240, 240, 180);
+			textAlign( LEFT, TOP);
+			textSize( 30);
+			text( touch_text, touch.x + 50, touch.y - 20);
+		}
 		popStyle();
 	}
 }

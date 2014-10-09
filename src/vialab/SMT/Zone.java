@@ -1742,9 +1742,18 @@ public class Zone extends PGraphics3DDelegate implements PConstants {
 	 */
 	@Override
 	public int hashCode(){
-		return Objects.hash(
-			applet, parent, name, x, y, height, width,
-			matrix, pickColor, renderer_name, direct);
+		return new Long(
+			( applet != null ? applet : "null").hashCode() +
+			( parent != null ? parent : "null").hashCode() +
+			( name != null ? name : "null").hashCode() +
+			new Integer( x).hashCode() +
+			new Integer( y).hashCode() +
+			new Integer( height).hashCode() +
+			new Integer( width).hashCode() +
+			( matrix != null ? matrix : "null").hashCode() +
+			( pickColor != null ? pickColor : "null").hashCode() +
+			( renderer_name != null ? renderer_name : "null").hashCode() +
+			new Boolean( direct).hashCode()).hashCode();
 	}
 
 	/**
