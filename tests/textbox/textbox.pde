@@ -13,9 +13,12 @@ boolean draw_fps = true;
 TextBox textbox;
 SwipeKeyboard keyboard;
 
+void settings(){
+	size( window_width, window_height, SMT.RENDERER);
+}
+
 void setup(){
 	//basic setup
-	size( window_width, window_height, SMT.RENDERER);
 	SMT.init( this, TouchSource.AUTOMATIC);
 
 	//create zones

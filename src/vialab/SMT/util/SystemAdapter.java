@@ -23,7 +23,7 @@ public class SystemAdapter implements ComponentListener {
 	private GraphicsDevice[] devices;
 	private int device_count;
 	//window fields
-	private JFrame window;
+	private Frame window;
 	private JRootPane rootpane;
 	private boolean window_update;
 	//sketch fields
@@ -66,8 +66,8 @@ public class SystemAdapter implements ComponentListener {
 	void connect( PApplet applet){
 		if( applet != null){
 			this.applet = applet;
-			this.window = (JFrame) applet.frame;
-			this.rootpane = window.getRootPane();
+			this.window = (Frame) applet.frame;
+			//this.rootpane = window.getRootPane();
 			window.addComponentListener( this);
 			updateWindow();
 			updateSketch();
@@ -153,12 +153,16 @@ public class SystemAdapter implements ComponentListener {
 	 * Update the adapter's sketch bounds information
 	 */
 	private void updateSketch(){
-		int content_x = window.getX() + rootpane.getX();
-		int content_y = window.getY() + rootpane.getY();
-		int sketch_borderx = ( rootpane.getWidth() - applet.width) / 2;
-		int sketch_bordery = ( rootpane.getHeight() - applet.height) / 2;
-		int sketch_x = content_x + sketch_borderx;
-		int sketch_y = content_y + sketch_bordery;
+		int content_x = window.getX();
+		int content_y = window.getY();
+		//int content_x = window.getX() + rootpane.getX();
+		//int content_y = window.getY() + rootpane.getY();
+		//int sketch_borderx = ( rootpane.getWidth() - applet.width) / 2;
+		//int sketch_bordery = ( rootpane.getHeight() - applet.height) / 2;
+		//int sketch_x = content_x + sketch_borderx;
+		//int sketch_y = content_y + sketch_bordery;
+		int sketch_x = content_x;
+		int sketch_y = content_y;
 		sketch_bounds.x = sketch_x;
 		sketch_bounds.y = sketch_y;
 		sketch_bounds.width = applet.width;

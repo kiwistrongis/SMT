@@ -20,8 +20,11 @@ boolean draw_count = true;
 boolean draw_info = true;
 
 //main methods
-void setup(){
+void settings(){
 	size( window_width, window_height, SMT.RENDERER);
+}
+
+void setup(){
 	SMT.init( this, TouchSource.AUTOMATIC);
 	textMode( MODEL);
 }

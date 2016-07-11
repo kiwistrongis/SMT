@@ -12,14 +12,20 @@ boolean draw_fps = true;
 //zones
 Zone asdf;
 
+void settings(){
+	size( window_width, window_height, SMT.RENDERER);
+}
+
 void setup(){
 	//basic setup
-	size( window_width, window_height, SMT.RENDERER);
 	SMT.init( this, TouchSource.AUTOMATIC);
 
 	//create zones
-	Zone textzone = new TextZone( 10, 10, 200, 50,
-		"test test", false, false, false);
+	Zone textzone = null;
+	try{ textzone = new TextZone( 10, 10, 200, 50,
+		"test test", false, false, false);}
+	catch( Exception exception){
+		exception.printStackTrace();}
 	SwipeKeyboard keyboard = new SwipeKeyboard();
 
 	//add our zones to the sketch

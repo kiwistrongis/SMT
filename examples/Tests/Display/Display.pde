@@ -34,14 +34,19 @@ String sketch_text;
 Rectangle2D.Float vscreen = new Rectangle2D.Float();
 PMatrix2D vmatrix;
 
-void setup(){
+void settings(){
 	if( window_fullscreen){
 		window_width = displayWidth;
 		window_height = displayHeight;
 	}
 	size( window_width, window_height, SMT.RENDERER);
+}
+
+void setup(){
 	SMT.setWarnUnimplemented( false);
-	SMT.init( this, TouchSource.AUTOMATIC);
+	try { SMT.init( this, TouchSource.AUTOMATIC);}
+	catch( Exception exception){
+		exception.printStackTrace();}
 	adapter = SMT.getSystemAdapter();
 
 	//choose touch source bounds method
